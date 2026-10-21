@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#203c31">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="行测自习室">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <meta name="description" content="离线行测练习、自动判题、错题复习与学习进度。">
+  <title>行测自习室 · 本地题库</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="print.css">
+  <link rel="stylesheet" href="mobile.css">
+  <script defer src="data/index.js"></script><script defer src="core.js"></script><script defer src="print.js"></script><script defer src="app.js"></script><script defer src="pwa.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a href="#" class="brand" aria-label="返回练习首页"><span class="brand-symbol">习</span><span>行测自习室<small>每天一点，稳步向前</small></span></a>
+    <div class="nav-label">我的学习</div>
+    <nav aria-label="学习模式">
+      <button class="nav-item active" data-mode="practice"><span>◫</span> 专项练习 <i>01</i></button>
+      <button class="nav-item" data-mode="wrong"><span>↺</span> 错题复习 <b id="nav-wrong">0</b></button>
+      <button class="nav-item" data-mode="star"><span>☆</span> 收藏重练 <b id="nav-star">0</b></button>
+      <button class="nav-item" data-mode="paper"><span>▤</span> 整卷练习 <i>04</i></button>
+    </nav>
+    <div class="sidebar-note"><span class="status-dot"></span> 离线题库，随时开练<p id="bank-summary">正在读取题库…</p></div>
+    <div class="sidebar-bottom"><button id="backup-open">备份与恢复 <span>↗</span></button><p>记录保存在当前浏览器。<br>换浏览器前，请先导出备份。</p></div>
+  </aside>
+  <main>
+    <header class="topbar"><div><span class="eyebrow">YOUR DAILY PRACTICE</span><h1 id="page-title">今天，也前进一步。</h1><p id="page-subtitle">选一个方向，把零散真题练成自己的积累。</p></div><div class="date-badge" id="today"></div></header>
+    <div id="storage-warning" class="notice warning" role="alert" hidden></div>
+    <section class="stats" aria-label="学习统计">
+      <div class="stat"><span>已练题目</span><strong id="stat-done">0</strong><small id="stat-total">去重后题目</small></div>
+      <div class="stat"><span>累计正确率</span><strong id="stat-accuracy">—</strong><small id="stat-attempts">还没有答题记录</small></div>
+      <div class="stat"><span>待巩固错题</span><strong id="stat-wrong">0</strong><small>答对后可标记为已掌握</small></div>
+      <div class="stat"><span>今日练习</span><strong id="stat-today">0</strong><small id="stat-today-detail">道题 · 按本机日期统计</small></div>
+    </section>
+    <section id="mobile-quick" class="mobile-quick" aria-label="碎片时间练习"><div><small>有空就练一点</small><h2>从 5 道题开始</h2><p>使用下面的筛选范围，材料题整组保留。</p></div><div class="quick-buttons"><button id="quick-five" class="primary" disabled>练 5 题 →</button><button id="quick-ten" class="secondary" disabled>练 10 题</button></div></section>
+    <section id="setup" class="card setup-card">
+      <div class="section-heading"><div><span class="eyebrow">SET YOUR PACE</span><h2 id="setup-title">开始一组专项练习</h2></div><span class="subtle-label" id="mode-tag">专注一个考点</span></div>
+      <div class="filters">
+        <label>学习模块<select id="module"></select></label>
+        <label>题型<select id="topic"><option value="">全部题型</option></select></label>
+        <label>年份<select id="year"></select></label>
+        <label>地区<select id="region"></select></label>
+        <label id="paper-filter" class="wide" hidden>试卷<select id="paper"></select></label>
+        <label>题目范围<select id="scope"><option value="all">全部题目</option><option value="new">尚未作答</option><option value="wrong">待巩固错题</option></select></label>
+        <label>出题顺序<select id="order"><option value="source">按来源顺序</option><option value="random">随机抽题</option></select></label>
+        <label id="batch-filter">本组题量<select id="batch"><option>5</option><option selected>10</option><option>20</option><option>30</option><option>50</option><option>100</option><option>200</option></select></label>
+      </div>
+      <div class="setup-footer"><div><strong id="match-count">正在整理题库…</strong><p id="match-note">专项练习合并相同题目，保留原卷来源。</p></div><button id="start" class="primary" disabled>开始练习 <span>→</span></button></div>
+      <div id="resume-bar" class="resume-bar" hidden><div><strong>上次的练习还在这里</strong><span id="resume-info"></span></div><button id="resume" class="secondary">继续上次练习 →</button></div>
+    </section>
+    <section id="study" hidden>
+      <div class="study-toolbar"><button id="back" class="text-button">← 返回选题</button><span id="session-label"></span><button id="print-open" class="secondary">打印 / 存为 PDF</button><button id="star" class="secondary" aria-pressed="false">☆ 收藏本题</button></div>
+      <div class="session-progress"><span id="session-progress-label"></span><div class="track"><div id="session-progress-fill"></div></div><span id="session-score"></span></div>
+      <div id="question-layout" class="question-layout">
+        <section id="material-card" class="card material-card" hidden><div class="material-title"><span>阅读材料</span><small>本材料与相关小题一起保留</small></div><div id="material" class="rich-text"></div></section>
+        <article class="card question-card">
+          <div class="question-meta"><span id="question-type" class="pill"></span><span id="question-topic"></span><span id="question-qid"></span></div>
+          <h2 id="question-number"></h2><div id="question-stem" class="rich-text stem"></div>
+          <div id="options" class="options" role="group" aria-label="选择答案"></div>
+          <div id="manual-note" class="notice warning" hidden>原题缺少有效标准答案，本题不计入自动判题和正确率。</div>
+          <div id="result" class="result" aria-live="polite" hidden></div>
+          <div class="answer-actions"><button id="submit" class="primary" disabled>提交答案</button><button id="retry" class="secondary" hidden>重新作答</button><button id="master" class="text-button" hidden>标记已掌握</button><span id="save-status" role="status"></span></div>
+          <section id="analysis-section" class="analysis" hidden><h3>参考解析</h3><div id="analysis" class="rich-text"></div></section>
+          <details class="sources"><summary id="sources-summary">题目来源</summary><ul id="sources"></ul></details>
+          <div id="image-warning" class="notice warning" hidden>本题有图片无法显示。原题库存在少量缺图；请结合解析阅读，缺图可能影响作答。</div>
+          <div class="question-footer"><button id="prev" class="secondary">← 上一题</button><small>数字键选项 · Enter 提交 · ← → 切题</small><button id="next" class="primary">下一题 →</button></div>
+        </article>
+      </div>
+      <section class="card navigator-card"><div class="navigator-heading"><h3>本组题目</h3><div class="legend"><span class="correct-dot"></span>答对 <span class="wrong-dot"></span>答错 <span class="empty-dot"></span>未答</div></div><div id="question-nav" class="question-nav"></div><p id="group-note">可以随时切题，已提交的答案会自动保存。</p></section>
+    </section>
+    <section class="card" style="padding:20px;margin-top:20px" aria-label="手机与离线使用"><button id="offline-help" class="secondary">手机与离线使用</button><p id="offline-status" role="status">正在检查离线支持…</p><button id="offline-save" class="primary" hidden>保存当前一组供离线练习</button><p class="help-text">学习记录保存在本机浏览器。离线前请保存题组，并定期导出学习备份。</p></section>
+    <footer class="page-footer"><span>行测自习室 · 免费个人练习版</span><span>题目与参考答案来自 ERRRC/xingcezhenti，内容以原题库为准。</span></footer>
+  </main>
+  <dialog id="backup-dialog"><div class="dialog-heading"><h2>把学习记录留好</h2><button id="backup-close" class="icon-button" aria-label="关闭">×</button></div><p>备份包括答题记录、错题和收藏。换电脑或浏览器时，将备份文件导入即可恢复。题库本身不包含在备份中。</p><div class="backup-actions"><button id="export" class="primary">导出学习备份</button><label class="secondary import-label">导入学习备份<input id="import" type="file" accept="application/json,.json" hidden></label></div><p class="help-text">导入时合并记录，同一道题保留较新的记录。请不要在多个标签页同时刷题，以免记录相互覆盖。</p><div id="backup-message" role="status"></div></dialog>
+  <dialog id="print-dialog"><div class="dialog-heading"><h2>把这一组题带到纸上</h2><button id="print-close" class="icon-button" aria-label="关闭打印设置">×</button></div><p id="print-summary"></p><div class="filters print-settings"><label>打印内容<select id="print-content"><option value="questions">题目卷（不含答案）</option><option value="both">题目卷＋答案解析（另起页）</option><option value="answers">仅答案与解析</option></select></label><label>每题作答留白<select id="print-space"><option value="none">不额外留白</option><option value="small" selected>少量留白</option><option value="large">较多留白</option></select></label></div><p class="help-text">打印当前整组题目，不仅是屏幕上的这一题。材料和图片一起打印；无答案的题会注明。纸上作答不会自动计分，完成后可回到页面录入选择。</p><p id="print-message" role="status"></p><div class="backup-actions"><button id="print-go" class="primary">打开打印窗口</button><button id="print-cancel" class="secondary">取消</button></div><p class="help-text">建议选择 A4 纸、100% 缩放，并关闭浏览器的页眉页脚；打印目标也可以选择“另存为 PDF”。</p></dialog>
+  <div id="print-root" aria-hidden="true"></div>
+  <dialog id="offline-dialog"><div class="dialog-heading"><h2>随手打开，练一组题</h2><button id="offline-close" class="icon-button" aria-label="关闭手机使用说明">×</button></div><p>iPhone：用 Safari 打开已发布的网址，点“分享”→“添加到主屏幕”。日常固定从主屏幕图标打开，练习记录保存在这个入口的本机存储中。</p><p>联网开始一组题后，点“保存当前一组供离线练习”，等待题目、材料、选项及解析里的图片保存完成。断网后从原入口打开，点“继续上次练习”。未保存的其他题目仍可能需要联网。</p><p>浏览器可能因空间不足或清理数据而移除缓存。离线题目与学习备份是两回事，请仍定期导出备份；备份可与此前微信小程序交换使用。</p><p class="help-text">电脑双击 index.html 可直接使用本地完整题库。手机离线安装需要 HTTPS 网址；电脑上的本地文件路径不能直接作为手机入口。</p></dialog>
+  <div id="mobile-answer-bar" class="mobile-answer-bar" hidden><button id="mobile-prev" class="secondary">上一题</button><button id="mobile-submit" class="primary" disabled>提交答案</button><button id="mobile-next" class="secondary">下一题</button></div>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <noscript>请使用支持 JavaScript 的浏览器打开本页面。</noscript>
+</body>
+</html>

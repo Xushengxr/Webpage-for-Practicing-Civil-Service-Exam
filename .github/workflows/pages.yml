@@ -1,0 +1,40 @@
+name: Publish study website
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout pinned question source
+        uses: actions/checkout@v4
+        with:
+          repository: ERRRC/xingcezhenti
+          ref: 278984401124db40da5163a31275b8deb9c282f4
+          path: source-bank
+          persist-credentials: false
+      - name: Build and verify complete question bank
+        run: |
+          python3 scripts/build_bank.py
+          python3 scripts/verify_bank.py
+          cp -R web/. site/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
