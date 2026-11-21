@@ -184,13 +184,18 @@ async function load(){const btn=$('refresh');btn.disabled=true;btn.textContent='
 // 生产网页优先读取仓库当前公开 JSON；无法获取时退回发布快照（过期/演示状态仍会警告并禁止正式信号）。
 const feeds = [
   'https://raw.githubusercontent.com/Xushengxr/Webpage-for-Practicing-Civil-Service-Exam/main/web/rotation-radar/data/market.json?t='+Date.now(),
+  'https://api.github.com/repos/Xushengxr/Webpage-for-Practicing-Civil-Service-Exam/contents/web/rotation-radar/data/market.json?ref=main&t='+Date.now(),
   './data/market.json?nocache='+Date.now()
 ];
 for(const url of feeds){
   try{
     const res=await fetch(url,{cache:'no-store'});
     if(!res.ok)throw new Error('HTTP '+res.status);
-    const x=await res.json();
+    let x=await res.json();
+    if(x?.encoding==='base64'&&typeof x.content==='string'){
+      const bytes=Uint8Array.from(atob(x.content.replace(/\s/g,'')),c=>c.charCodeAt(0));
+      x=JSON.parse(new TextDecoder().decode(bytes));
+    }
     if(x?.latest?.date&&x?.forecast&&Array.isArray(x?.history)){
       // 不能由演示/过期数据覆盖已取得的较新有效行情。
       if(!data?.latest?.date||x.latest.date>data.latest.date||
