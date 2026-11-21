@@ -1,0 +1,111 @@
+{
+  "demo": true,
+  "generated_at": "2026-07-31T18:30:00+08:00",
+  "calendar_source": "示例交易日历",
+  "price_sources": {
+    "growth": "已核实历史创业板指数",
+    "dividend": "已核实历史中证红利价格指数"
+  },
+  "latest": {
+    "date": "2026-07-31",
+    "growth": 3343.9641,
+    "dividend": 5569.41,
+    "ratio": 0.600422
+  },
+  "current_state": {
+    "direction": "dividend",
+    "cycle_side": "dividend",
+    "done": 3
+  },
+  "forecast": {
+    "is_confirmed": true,
+    "signal_month": "2026-07",
+    "ratio": 0.600422,
+    "expected_execution": "2026-08-03",
+    "kind": "hold",
+    "side": "dividend",
+    "new_tiers": 0,
+    "reached_tiers": 1,
+    "previous_tiers": 3,
+    "monthly_buy_side": "dividend",
+    "active_cycle_done": 3,
+    "active_cycle_side": "dividend"
+  },
+  "last_confirmed": {
+    "month": "2026-07",
+    "month_end_date": "2026-07-31",
+    "execution_date": "2026-08-03",
+    "ratio": 0.600422
+  },
+  "pending_confirmed": {
+    "month": "2026-07",
+    "month_end_date": "2026-07-31",
+    "execution_date": "2026-08-03",
+    "ratio": 0.600422
+  },
+  "history": [
+    {
+      "date": "2026-01-30",
+      "growth": 3346.355,
+      "dividend": 5700.01,
+      "ratio": 0.587079
+    },
+    {
+      "date": "2026-02-27",
+      "growth": 3310.305,
+      "dividend": 5826.71,
+      "ratio": 0.568126
+    },
+    {
+      "date": "2026-03-31",
+      "growth": 3184.952,
+      "dividend": 5727.85,
+      "ratio": 0.556047
+    },
+    {
+      "date": "2026-04-30",
+      "growth": 3677.1485,
+      "dividend": 5865.07,
+      "ratio": 0.626957
+    },
+    {
+      "date": "2026-05-29",
+      "growth": 4037.951,
+      "dividend": 5578.69,
+      "ratio": 0.723817
+    },
+    {
+      "date": "2026-06-30",
+      "growth": 4342.7123,
+      "dividend": 5022.46,
+      "ratio": 0.86466
+    },
+    {
+      "date": "2026-07-31",
+      "growth": 3343.9641,
+      "dividend": 5569.41,
+      "ratio": 0.600422
+    }
+  ],
+  "events": [
+    {
+      "month": "2026-04",
+      "month_end_date": "2026-04-30",
+      "execution_date": "2026-05-06",
+      "ratio": 0.626957,
+      "kind": "rotate",
+      "side": "dividend",
+      "new_tiers": 1
+    },
+    {
+      "month": "2026-05",
+      "month_end_date": "2026-05-29",
+      "execution_date": "2026-06-01",
+      "ratio": 0.723817,
+      "kind": "rotate",
+      "side": "dividend",
+      "new_tiers": 2
+    }
+  ],
+  "notes": "历史演示数据，需部署 GitHub Pages 后由每日更新任务替换。"
+}

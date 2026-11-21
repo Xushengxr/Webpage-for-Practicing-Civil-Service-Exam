@@ -1,0 +1,46 @@
+name: Update rotation radar market data
+on:
+  schedule:
+    # China Standard Time Mon-Fri 18:23 and 20:17 (UTC+8)
+    - cron: '23 10 * * 1-5'
+    - cron: '17 12 * * 1-5'
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'web/rotation-radar/scripts/**'
+      - 'web/rotation-radar/requirements.txt'
+      - '.github/workflows/rotation-radar-update.yml'
+permissions:
+  contents: write
+concurrency:
+  group: rotation-radar-update
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: web/rotation-radar/requirements.txt
+      - name: Install dependencies
+        run: python -m pip install -r web/rotation-radar/requirements.txt
+      - name: Fetch current index closes and validate signals
+        run: python web/rotation-radar/scripts/update_market.py
+      - name: Commit updated public market snapshot
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add web/rotation-radar/data/market.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'data: refresh rotation radar market snapshot'
+            git push
+          else
+            echo 'No change in public market data'
+          fi
