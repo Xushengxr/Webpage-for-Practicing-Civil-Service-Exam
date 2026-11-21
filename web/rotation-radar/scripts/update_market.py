@@ -40,14 +40,15 @@ def get_index_data(ak, label: str) -> tuple[pd.DataFrame, str]:
     if label == 'growth':
         methods = [
             ('东方财富深交所指数', lambda: ak.index_zh_daily_em(symbol='sz399006', start_date='20100101', end_date='20501231')),
-            ('新浪深交所指数', lambda: ak.stock_zh_index_daily(symbol='sz399006')),
+            ('新浪深交所指数', lambda: ak.index_zh_daily_sina(symbol='sz399006')),
             ('东方财富通用指数', lambda: ak.index_zh_hist_em(symbol='399006', period='daily', start_date='20100101', end_date='20501231')),
         ]
     else:
         methods = [
+            ('新浪中证红利指数（首选，避免东方财富限流）', lambda: ak.index_zh_daily_sina(symbol='sh000922')),
             ('东方财富中证指数', lambda: ak.index_zh_daily_em(symbol='csi000922', start_date='20100101', end_date='20501231')),
             ('东方财富沪市指数', lambda: ak.index_zh_daily_em(symbol='sh000922', start_date='20100101', end_date='20501231')),
-            ('新浪中证红利指数', lambda: ak.stock_zh_index_daily(symbol='sh000922')),
+            ('新浪中证红利指数', lambda: ak.index_zh_daily_sina(symbol='sh000922')),
             ('东方财富通用指数', lambda: ak.index_zh_hist_em(symbol='000922', period='daily', start_date='20100101', end_date='20501231')),
         ]
     errors = []
