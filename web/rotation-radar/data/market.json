@@ -1,4 +1,19 @@
 {
+  "strategy": {
+    "id": "cyb-dividend-fixed-v21-0375-0625",
+    "lower": 0.375,
+    "upper": 0.625,
+    "growth_levels": [
+      0.375,
+      0.325,
+      0.275
+    ],
+    "dividend_levels": [
+      0.625,
+      0.675,
+      0.725
+    ]
+  },
   "latest": {
     "date": "2026-11-20",
     "growth": 2212.127,
@@ -33,10 +48,43 @@
   "pending_confirmed": null,
   "events": [
     {
-      "month": "2017-07",
-      "month_end_date": "2017-07-31",
-      "execution_date": "2017-08-01",
-      "ratio": 0.377466,
+      "month": "2014-06",
+      "month_end_date": "2014-06-30",
+      "execution_date": "2014-07-01",
+      "ratio": 0.629328,
+      "kind": "rotate",
+      "side": "dividend",
+      "new_tiers": 1,
+      "reached_tiers": 1,
+      "previous_tiers": 0
+    },
+    {
+      "month": "2015-05",
+      "month_end_date": "2015-05-29",
+      "execution_date": "2015-06-01",
+      "ratio": 0.659836,
+      "kind": "rotate",
+      "side": "dividend",
+      "new_tiers": 1,
+      "reached_tiers": 1,
+      "previous_tiers": 0
+    },
+    {
+      "month": "2015-11",
+      "month_end_date": "2015-11-30",
+      "execution_date": "2015-12-01",
+      "ratio": 0.631465,
+      "kind": "rotate",
+      "side": "dividend",
+      "new_tiers": 1,
+      "reached_tiers": 1,
+      "previous_tiers": 0
+    },
+    {
+      "month": "2017-11",
+      "month_end_date": "2017-11-30",
+      "execution_date": "2017-12-01",
+      "ratio": 0.374605,
       "kind": "rotate",
       "side": "growth",
       "new_tiers": 1,
@@ -44,21 +92,10 @@
       "previous_tiers": 0
     },
     {
-      "month": "2018-01",
-      "month_end_date": "2018-01-31",
-      "execution_date": "2018-02-01",
-      "ratio": 0.342098,
-      "kind": "rotate",
-      "side": "growth",
-      "new_tiers": 1,
-      "reached_tiers": 2,
-      "previous_tiers": 1
-    },
-    {
-      "month": "2018-05",
-      "month_end_date": "2018-05-31",
-      "execution_date": "2018-06-01",
-      "ratio": 0.382432,
+      "month": "2018-07",
+      "month_end_date": "2018-07-31",
+      "execution_date": "2018-08-01",
+      "ratio": 0.371041,
       "kind": "rotate",
       "side": "growth",
       "new_tiers": 1,
@@ -66,10 +103,10 @@
       "previous_tiers": 0
     },
     {
-      "month": "2018-09",
-      "month_end_date": "2018-09-28",
-      "execution_date": "2018-10-08",
-      "ratio": 0.343498,
+      "month": "2019-01",
+      "month_end_date": "2019-01-31",
+      "execution_date": "2019-02-01",
+      "ratio": 0.306073,
       "kind": "rotate",
       "side": "growth",
       "new_tiers": 1,
@@ -105,31 +142,20 @@
       "ratio": 0.706032,
       "kind": "rotate",
       "side": "dividend",
-      "new_tiers": 2,
-      "reached_tiers": 3,
+      "new_tiers": 1,
+      "reached_tiers": 2,
       "previous_tiers": 1
     },
     {
-      "month": "2021-04",
-      "month_end_date": "2021-04-30",
-      "execution_date": "2021-05-06",
-      "ratio": 0.623705,
+      "month": "2021-05",
+      "month_end_date": "2021-05-31",
+      "execution_date": "2021-06-01",
+      "ratio": 0.635781,
       "kind": "rotate",
       "side": "dividend",
       "new_tiers": 1,
       "reached_tiers": 1,
       "previous_tiers": 0
-    },
-    {
-      "month": "2021-06",
-      "month_end_date": "2021-06-30",
-      "execution_date": "2021-07-01",
-      "ratio": 0.674735,
-      "kind": "rotate",
-      "side": "dividend",
-      "new_tiers": 1,
-      "reached_tiers": 2,
-      "previous_tiers": 1
     },
     {
       "month": "2021-07",
@@ -139,19 +165,8 @@
       "kind": "rotate",
       "side": "dividend",
       "new_tiers": 1,
-      "reached_tiers": 3,
-      "previous_tiers": 2
-    },
-    {
-      "month": "2021-09",
-      "month_end_date": "2021-09-30",
-      "execution_date": "2021-10-08",
-      "ratio": 0.618576,
-      "kind": "rotate",
-      "side": "dividend",
-      "new_tiers": 1,
-      "reached_tiers": 1,
-      "previous_tiers": 0
+      "reached_tiers": 2,
+      "previous_tiers": 1
     },
     {
       "month": "2021-10",
@@ -161,19 +176,19 @@
       "kind": "rotate",
       "side": "dividend",
       "new_tiers": 1,
-      "reached_tiers": 2,
-      "previous_tiers": 1
-    },
-    {
-      "month": "2023-09",
-      "month_end_date": "2023-09-28",
-      "execution_date": "2023-10-09",
-      "ratio": 0.388269,
-      "kind": "rotate",
-      "side": "growth",
-      "new_tiers": 1,
       "reached_tiers": 1,
       "previous_tiers": 0
+    },
+    {
+      "month": "2021-11",
+      "month_end_date": "2021-11-30",
+      "execution_date": "2021-12-01",
+      "ratio": 0.693004,
+      "kind": "rotate",
+      "side": "dividend",
+      "new_tiers": 1,
+      "reached_tiers": 2,
+      "previous_tiers": 1
     },
     {
       "month": "2024-01",
@@ -182,26 +197,15 @@
       "ratio": 0.309759,
       "kind": "rotate",
       "side": "growth",
-      "new_tiers": 1,
+      "new_tiers": 2,
       "reached_tiers": 2,
-      "previous_tiers": 1
-    },
-    {
-      "month": "2024-12",
-      "month_end_date": "2024-12-31",
-      "execution_date": "2025-01-02",
-      "ratio": 0.383695,
-      "kind": "rotate",
-      "side": "growth",
-      "new_tiers": 1,
-      "reached_tiers": 1,
       "previous_tiers": 0
     },
     {
-      "month": "2025-03",
-      "month_end_date": "2025-03-31",
-      "execution_date": "2025-04-01",
-      "ratio": 0.388998,
+      "month": "2025-04",
+      "month_end_date": "2025-04-30",
+      "execution_date": "2025-05-06",
+      "ratio": 0.364679,
       "kind": "rotate",
       "side": "growth",
       "new_tiers": 1,
@@ -226,9 +230,20 @@
       "ratio": 0.723817,
       "kind": "rotate",
       "side": "dividend",
-      "new_tiers": 2,
-      "reached_tiers": 3,
+      "new_tiers": 1,
+      "reached_tiers": 2,
       "previous_tiers": 1
+    },
+    {
+      "month": "2026-06",
+      "month_end_date": "2026-06-30",
+      "execution_date": "2026-07-01",
+      "ratio": 0.864658,
+      "kind": "rotate",
+      "side": "dividend",
+      "new_tiers": 1,
+      "reached_tiers": 3,
+      "previous_tiers": 2
     }
   ],
   "last_monthly_signals": [
@@ -356,20 +371,10 @@
   "confirmed_count": 197,
   "demo": false,
   "etf_closes": {
-    "growth": {
-      "symbol": "159915",
-      "date": "2026-11-20",
-      "close": 2.23,
-      "source": "AKShare fund_etf_hist_em 不复权收盘价"
-    },
-    "dividend": {
-      "symbol": "515080",
-      "date": "2026-11-20",
-      "close": 1.559,
-      "source": "AKShare fund_etf_hist_em 不复权收盘价"
-    }
+    "growth": null,
+    "dividend": null
   },
-  "generated_at": "2026-11-21T22:36:51+08:00",
+  "generated_at": "2026-11-21T22:51:05+08:00",
   "price_sources": {
     "growth": "新浪深交所指数",
     "dividend": "中证指数公司官方历史"
