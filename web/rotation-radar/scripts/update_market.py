@@ -45,10 +45,11 @@ def get_index_data(ak, label: str) -> tuple[pd.DataFrame, str]:
         ]
     else:
         methods = [
-            ('新浪中证红利指数（首选，避免东方财富限流）', lambda: ak.index_zh_daily_sina(symbol='sh000922')),
+            ('中证指数公司官方历史', lambda: ak.index_hist_csindex(symbol='000922', start_date='20100601', end_date='20501231')),
+            ('腾讯中证红利指数', lambda: ak.index_zh_daily_tx(symbol='sh000922', start_date='20100601', end_date='20501231')),
+            ('新浪中证红利指数', lambda: ak.index_zh_daily_sina(symbol='sh000922')),
             ('东方财富中证指数', lambda: ak.index_zh_daily_em(symbol='csi000922', start_date='20100101', end_date='20501231')),
             ('东方财富沪市指数', lambda: ak.index_zh_daily_em(symbol='sh000922', start_date='20100101', end_date='20501231')),
-            ('新浪中证红利指数', lambda: ak.index_zh_daily_sina(symbol='sh000922')),
             ('东方财富通用指数', lambda: ak.index_zh_hist_em(symbol='000922', period='daily', start_date='20100101', end_date='20501231')),
         ]
     errors = []
