@@ -1,13 +1,15 @@
-/* 轮动雷达 V2.0 个人账本视图：仅在此浏览器存储，GitHub Pages 不接收持仓。 */
+/* 轮动雷达 V2.1 个人账本视图：仅在此浏览器存储，GitHub Pages 不接收持仓。 */
 (()=>{'use strict';
 const E=window.RotationPortfolio, $=id=>document.getElementById(id);
-const STORE='rotationRadarPortfolioV2';let account=null,market=null,viewPlan=null,quotes={growth:null,dividend:null},lastSource=null;
+const STORE='rotationRadarPortfolioV21_0375_0625';
+const OLD_STORE='rotationRadarPortfolioV2';let account=null,market=null,viewPlan=null,quotes={growth:null,dividend:null},lastSource=null;
 const nf=(n,d=2)=>Number(n).toLocaleString('zh-CN',{maximumFractionDigits:d,minimumFractionDigits:d});
 const yuan=n=>'¥'+nf(n,2),nSide=s=>s==='growth'?'创业板':'中证红利';
 const byMonth=d=>d.slice(0,7),iso=()=>new Date().toISOString().slice(0,10);
 function msg(s,bad=false){const el=$('acctToast');el.textContent=s;el.className=bad?'acctMsg bad':'acctMsg';el.style.display='block';setTimeout(()=>{el.style.display='none'},5500)}
 function persist(){try{localStorage.setItem(STORE,JSON.stringify(account));return true}catch{msg('浏览器不允许保存个人数据，请先导出备份文件！',true);return false}}
-function load(){try{let x=JSON.parse(localStorage.getItem(STORE)||'null');if(x){account=E.validateAccount(x);account.priceOverride ||= {growth:null,dividend:null};account.navHistory ||= []; account.processedMonths ||= [];}}catch(e){account=null;msg('发现不兼容的旧版账户，请通过备份导入恢复。',true)}}
+function load(){try{let x=JSON.parse(localStorage.getItem(STORE)||'null');if(x){account=E.validateAccount(x);account.priceOverride ||= {growth:null,dividend:null};account.navHistory ||= []; account.processedMonths ||= [];}}catch(e){account=null;msg('发现不兼容的账户备份，请核对其策略版本。',true)}
+if(!account){try{if(localStorage.getItem(OLD_STORE)){msg('已保留旧阈值的本地持仓账本。本版按0.375/0.625重新开账，旧账本不会自动按新阈值改写；如需恢复原仓位，请手工核对后补录。',true);}}catch{}}}
 function number(id){return Number($(id).value)}
 function getPrices(){return {growth:Number($('acctQuoteG').value)||0,dividend:Number($('acctQuoteR').value)||0}}
 function validateSymbol(x){return /^\d{6}$/.test(x)}
@@ -24,7 +26,7 @@ for(const [side,input] of [['growth','acctQuoteG'],['dividend','acctQuoteR']]){
   $('quoteStatus'+(side==='growth'?'G':'R')).textContent=`需要手动输入实际 ${account.symbols[side]} ETF 价格（不能填指数点位）`;}
 }
 if(changed)renderMetrics();}
-function validatedMarket(){return market&&!market.demo && market.latest?.date && !isOld(market.latest.date)}
+function validatedMarket(){return market&&!market.demo && market.strategy?.id===E.STRATEGY_ID && market.latest?.date && !isOld(market.latest.date)}
 function isOld(d){const timestamp=new Date(d+'T16:00:00+08:00');const days=(Date.now()-timestamp)/86400000;return !Number.isFinite(days)||days>7||days< -1;}
 function lastSignal(){if(!market||!account)return null;
  const start=account.startMonth || byMonth(account.journal[0].date);
@@ -66,7 +68,7 @@ function renderPlan(){if(!account)return;
  parts.push(viewPlan.selected?`当月新增定投 ${yuan(viewPlan.monthly)} → ${nSide(viewPlan.selected)}；参考合并买入 ${nf(viewPlan.buyQty,0)}份（100份整数倍，可按设置调整）。`:`当月新增 ${yuan(viewPlan.monthly)} 留在现金账户。`);
  parts.push(`预计交易后现金：${viewPlan.complete?yuan(viewPlan.endCash):'价格不足，无法计算'}`);
  if(viewPlan.missing.length)parts.push('缺少：'+viewPlan.missing.join('、'));
- if(riskStale)parts.push('⚠ 目前为演示、过期或缺失行情，只允许看账本，不允许确认策略指令。');
+ if(riskStale)parts.push('⚠ 目前为演示、过期、版本不匹配或缺失行情，只允许看账本，不允许确认策略指令。');
  else if(!sig.confirmed)parts.push('⚠ 这是月中预判，月底收盘前不应执行。');
  else if(sig.expectedExecution && iso()<sig.expectedExecution)parts.push('正式信号已锁定，但执行日尚未到来。');
  root.replaceChildren();for(const line of parts){const p=document.createElement('p');p.textContent=line;root.appendChild(p);}

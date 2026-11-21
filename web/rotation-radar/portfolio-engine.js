@@ -1,4 +1,4 @@
-/* 轮动雷达 V2.0 个人账本与交易计划纯计算引擎。
+/* 轮动雷达 V2.1 个人账本与交易计划纯计算引擎。
  * 浏览器 window.RotationPortfolio / Node require()；不联网、不自动下单。
  * 信号：价格指数比值；实际买入：ETF 份额与真实成交价，不能混用。
  */
@@ -8,7 +8,10 @@
   else root.RotationPortfolio = api;
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
-  const VERSION=2;
+  const VERSION=3;
+  const STRATEGY_ID="cyb-dividend-fixed-v21-0375-0625";
+  const GROWTH_LEVELS=[0.375,0.325,0.275];
+  const DIVIDEND_LEVELS=[0.625,0.675,0.725];
   const rd=(n,k=6)=>Math.round((n+Number.EPSILON)*10**k)/10**k;
   const finite=(x)=>typeof x==='number'&&Number.isFinite(x);
   const okAmount=(x)=>finite(x)&&x>=0;
@@ -16,10 +19,10 @@
   const err=s=>{throw new Error(s)};
   function tierCount(r, side) {
     if(!finite(r)||r<=0)err('指数比值无效');
-    return side==='growth' ? [0.4,0.35,0.3].filter(t=>r<t).length
-     : side==='dividend' ? [0.6,0.65,0.7].filter(t=>r>t).length : 0;
+    return side==='growth' ? GROWTH_LEVELS.filter(t=>r<t).length
+     : side==='dividend' ? DIVIDEND_LEVELS.filter(t=>r>t).length : 0;
   }
-  function sideOf(r){if(!finite(r)||r<=0)err('指数比值无效');return r<0.4?'growth':r>0.6?'dividend':null;}
+  function sideOf(r){if(!finite(r)||r<=0)err('指数比值无效');return r<GROWTH_LEVELS[0]?'growth':r>DIVIDEND_LEVELS[0]?'dividend':null;}
   function createAccount(opts={}) {
     const start=Number(opts.initialCash??100000), monthly=Number(opts.monthly??1000),fee=Number(opts.fee??0.001), lot=Number(opts.lot??100);
     if(!okAmount(start)||!okAmount(monthly)||!finite(fee)||fee<0||fee>=.02||!Number.isSafeInteger(lot)||lot<1)err('初始资金、定投、费率或交易单位无效');
@@ -177,5 +180,5 @@
     a.journal.push({kind:'manual_'+kind,date,asset:asset||null,amount:finite(amount)?amount:null,shares:finite(shares)?shares:null,price:finite(price)?price:null,fee:finite(fee)?fee:0,note:String(entry.note||'').slice(0,120)});
     return a;
   }
-  return {VERSION,createAccount,validateAccount,tierCount,sideOf,plan,commit,skip,manual,getEquity,addValuation,clone};
+  return {VERSION,STRATEGY_ID,GROWTH_LEVELS,DIVIDEND_LEVELS,createAccount,validateAccount,tierCount,sideOf,plan,commit,skip,manual,getEquity,addValuation,clone};
 });

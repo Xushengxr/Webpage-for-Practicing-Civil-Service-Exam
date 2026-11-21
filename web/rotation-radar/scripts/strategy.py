@@ -3,19 +3,23 @@ from __future__ import annotations
 
 from datetime import datetime
 
+STRATEGY_ID = "cyb-dividend-fixed-v21-0375-0625"
+GROWTH_LEVELS = (0.375, 0.325, 0.275)
+DIVIDEND_LEVELS = (0.625, 0.675, 0.725)
+
 
 def tier_count(ratio: float, side: str) -> int:
     if side == "growth":
-        return sum(ratio < cut for cut in (0.40, 0.35, 0.30))
+        return sum(ratio < cut for cut in GROWTH_LEVELS)
     if side == "dividend":
-        return sum(ratio > cut for cut in (0.60, 0.65, 0.70))
+        return sum(ratio > cut for cut in DIVIDEND_LEVELS)
     raise ValueError("side 必须是 growth 或 dividend")
 
 
 def classify(ratio: float) -> str | None:
-    if ratio < 0.40:
+    if ratio < GROWTH_LEVELS[0]:
         return "growth"
-    if ratio > 0.60:
+    if ratio > DIVIDEND_LEVELS[0]:
         return "dividend"
     return None
 
@@ -107,6 +111,8 @@ def summarize_history(daily: list[dict], sessions: list[str]) -> dict:
         "active_cycle_side": state["cycle_side"],
     }
     return {
+        "strategy": {"id": STRATEGY_ID, "lower": GROWTH_LEVELS[0], "upper": DIVIDEND_LEVELS[0],
+                     "growth_levels": list(GROWTH_LEVELS), "dividend_levels": list(DIVIDEND_LEVELS)},
         "latest": {"date": last_date, "growth": round(last["growth"], 4),
                    "dividend": round(last["dividend"], 4), "ratio": round(ratio, 6)},
         "current_state": state,

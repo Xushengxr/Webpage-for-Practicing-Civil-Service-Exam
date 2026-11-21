@@ -5,10 +5,10 @@ function sig(month,ratio,exec){return {month,ratio,confirmed:true,expectedExecut
 const ts=['2026-11','2026-12','2027-01','2027-02','2027-03'];
 let a=E.createAccount({initialCash:100000,monthly:1000,fee:.001,lot:100,startDate:'2026-11-01'});
 assert.equal(a.cash,100000);
-assert.equal(E.tierCount(.4,'growth'),0);
-assert.equal(E.tierCount(.34999,'growth'),2);
+assert.equal(E.tierCount(.375,'growth'),0);
+assert.equal(E.tierCount(.32499,'growth'),2);
 assert.equal(E.tierCount(.7,'dividend'),2);
-let p=E.plan(a,sig('2026-11',.38,'2026-12-01'),PRICE);
+let p=E.plan(a,sig('2026-11',.36,'2026-12-01'),PRICE);
 assert.equal(p.reached,1);
 assert.equal(p.newTiers,1);
 assert.equal(p.actualSell,0);
@@ -24,14 +24,14 @@ assert.equal(a.cycle.done,1);
 assert.equal(a.direction,'growth');
 assert.throws(()=>E.commit(a,p,PRICE,{date:'2026-12-01'}),/已经|重复|账户状态/);
 // 继续跌破第二档，必须按首个快照的现金1/3，而不是重新将当日余额/3。
-p=E.plan(a,sig('2026-12',.34,'2027-01-04'),PRICE);
+p=E.plan(a,sig('2026-12',.31,'2027-01-04'),PRICE);
 assert.equal(p.newTiers,1);
 assert.equal(p.cashTranche,100000/3);
 assert.equal(p.previousDone,1);
 a=E.commit(a,p,PRICE,{date:'2027-01-04'}).account;
 assert.equal(a.cycle.done,2);
-// 0.36 仍在0.4以下，但档位不能回退到第一档
-p=E.plan(a,sig('2027-01',.36,'2027-02-01'),PRICE);
+// 0.34 仍在0.375以下，但档位不能回退到第一档
+p=E.plan(a,sig('2027-01',.34,'2027-02-01'),PRICE);
 assert.equal(p.newTiers,0);
 a=E.commit(a,p,PRICE,{date:'2027-02-01'}).account;
 assert.equal(a.cycle.done,2,'档位数不能随比值回升而减少');
@@ -43,12 +43,12 @@ a=E.commit(a,p,PRICE,{date:'2027-03-01'}).account;
 assert.equal(a.cycle,null);
 assert.equal(a.direction,'growth');
 // 后续触发0.28，全三档集中执行，冻结现金是新周期开始时的余额
-p=E.plan(a,sig('2027-03',.28,'2027-04-01'),PRICE);
+p=E.plan(a,sig('2027-03',.27,'2027-04-01'),PRICE);
 assert.equal(p.newTiers,3);
 a=E.commit(a,p,PRICE,{date:'2027-04-01'}).account;
 assert.equal(a.cycle.done,3);
 // 反向跳过中性区直接触发红利，锁定创业板当前份额并按3档计
-p=E.plan(a,sig('2027-04',.705,'2027-05-06'),PRICE);
+p=E.plan(a,sig('2027-04',.73,'2027-05-06'),PRICE);
 assert.equal(p.source,'growth');assert.equal(p.newTiers,3);
 assert.equal(p.actualSell,a.shares.growth);
 a=E.commit(a,p,PRICE,{date:'2027-05-06'}).account;
@@ -67,8 +67,9 @@ assert.throws(()=>E.manual(initial,{kind:'buy',asset:'growth',shares:1000,price:
 const v=E.addValuation(initial,{growth:2.5,dividend:1.3},'2026-11-10');
 assert(v.valuation.drawdown<0);
 // 未录入ETF价，不用指数点位强行换算/记账
-p=E.plan(a,sig('2027-05',.35,'2027-06-01'),{growth:0,dividend:0});
+p=E.plan(a,sig('2027-05',.325,'2027-06-01'),{growth:0,dividend:0});
 assert(p.missing.length>0);
 // 严格等于阈值不触发档位
-assert.equal(E.tierCount(.35,'growth'),1);
+assert.equal(E.tierCount(.325,'growth'),1);
+assert.equal(E.STRATEGY_ID,'cyb-dividend-fixed-v21-0375-0625');
 console.log('✓ 账本策略：15组规则断言全部通过（含跨档、重置、锁仓、月入金、手续费、回撤、防重复）');

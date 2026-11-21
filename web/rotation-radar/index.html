@@ -45,7 +45,7 @@
 </head>
 <body>
  <div class="container">
-  <header class="top"><div class="brand"><div class="logo">↗</div><div><strong>轮动雷达 V2.1</strong><span>自动行情 × 三档轮动 × 个人持仓账本</span></div></div><a class="linkBtn" href="#my-account">我的账户 ↓</a><button class="linkBtn" id="refresh" type="button">⟳ 检查更新</button></header>
+  <header class="top"><div class="brand"><div class="logo">↗</div><div><strong>轮动雷达 V2.1 · 候选分界线</strong><span>自动行情 × 三档轮动 × 个人持仓账本</span></div></div><a class="linkBtn" href="#my-account">我的账户 ↓</a><button class="linkBtn" id="refresh" type="button">⟳ 检查更新</button></header>
   <div class="warning" id="warning" role="status">正在检查公开行情更新时间…</div>
   <section class="hero" aria-label="指数与下月计划">
    <div class="card heroMain"><div class="overline">最新可用收盘指数比值 · 399006 / 000922</div><div class="ratio" id="ratio">—<small> 倍</small></div><div class="chip" id="ratioTag"><span class="dot"></span><span>等待数据</span></div><div class="sub" id="latestDate">尚未获得可靠的收盘数据</div></div>
@@ -54,11 +54,11 @@
   <section class="rowMetrics" aria-label="监测值">
    <div class="card miniCard"><label>创业板指 · 399006</label><div class="metric" id="growth">—</div><p>信号用收盘价格指数</p></div>
    <div class="card miniCard"><label>中证红利 · 000922</label><div class="metric" id="dividend">—</div><p>信号用收盘价格指数</p></div>
-   <div class="card miniCard"><label>目标已触发档数</label><div class="metric" id="tiers">—</div><p id="tierSub">0.40 / 0.35 / 0.30；0.60 / 0.65 / 0.70</p></div>
+   <div class="card miniCard"><label>目标已触发档数</label><div class="metric" id="tiers">—</div><p id="tierSub">0.375 / 0.325 / 0.275；0.625 / 0.675 / 0.725</p></div>
   </section>
   <section class="gridBody">
    <div class="card chartCard"><div class="panelHead"><h2>指数相对强弱趋势</h2><span class="muted" id="chartSpan">最近收盘记录</span></div><div class="graph"><svg viewBox="0 0 600 230" preserveAspectRatio="none" id="ratioChart" role="img" aria-label="历史比值折线及策略阈值"></svg></div><div class="legend"><span>创业板 / 红利比值</span><span>轮动阈值线</span></div></div>
-   <div class="card planCard"><div class="panelHead"><h2>月度执行逻辑</h2><span class="muted">严格月频 · 非日内交易</span></div><div class="step"><div class="stepIcon">01</div><div><div class="stitle">每日收盘后监控</div><p>只计算当天比值与临时档位，不因为日内跨阈值而买卖。</p></div></div><div class="step"><div class="stepIcon">02</div><div><div class="stitle">最后一个交易日锁定</div><p>用交易所交易日历确认月底，月底收盘后固定当月信号。</p></div></div><div class="step"><div class="stepIcon">03</div><div><div class="stitle">下月首个交易日执行</div><p>多档合并，每档为轮动开始时锁定原始份额的1/3；当月1000元只定投一次。</p></div></div><div class="planFooter"><div class="pills"><span class="pill">低于0.40 买创业板</span><span class="pill">高于0.60 买中证红利</span></div></div></div>
+   <div class="card planCard"><div class="panelHead"><h2>月度执行逻辑</h2><span class="muted">严格月频 · 非日内交易</span></div><div class="step"><div class="stepIcon">01</div><div><div class="stitle">每日收盘后监控</div><p>只计算当天比值与临时档位，不因为日内跨阈值而买卖。</p></div></div><div class="step"><div class="stepIcon">02</div><div><div class="stitle">最后一个交易日锁定</div><p>用交易所交易日历确认月底，月底收盘后固定当月信号。</p></div></div><div class="step"><div class="stepIcon">03</div><div><div class="stitle">下月首个交易日执行</div><p>多档合并，每档为轮动开始时锁定原始份额的1/3；当月1000元只定投一次。</p></div></div><div class="planFooter"><div class="pills"><span class="pill">低于0.375 买创业板</span><span class="pill">高于0.625 买中证红利</span></div></div></div>
   </section>
   <section class="lower">
    <div class="card calcCard"><h2>旧版快捷换算器</h2><p>仅按输入的市值进行粗略估算，不读取真实份额与账本。下方的「个人持仓账本」才会精确记录买卖。</p>
@@ -130,36 +130,37 @@
  </div>
  <div id="toast" aria-live="polite"></div>
 <script type="application/json" id="demoData">
-{"demo":true,"generated_at":"2026-07-31T18:30:00+08:00","calendar_source":"示例交易日历","price_sources":{"growth":"已核实历史创业板指数","dividend":"已核实历史中证红利价格指数"},"latest":{"date":"2026-07-31","growth":3343.9641,"dividend":5569.41,"ratio":0.600422},"current_state":{"direction":"dividend","cycle_side":"dividend","done":3},"forecast":{"is_confirmed":true,"signal_month":"2026-07","ratio":0.600422,"expected_execution":"2026-08-03","kind":"hold","side":"dividend","new_tiers":0,"reached_tiers":1,"previous_tiers":3,"monthly_buy_side":"dividend","active_cycle_done":3,"active_cycle_side":"dividend"},"last_confirmed":{"month":"2026-07","month_end_date":"2026-07-31","execution_date":"2026-08-03","ratio":0.600422},"pending_confirmed":{"month":"2026-07","month_end_date":"2026-07-31","execution_date":"2026-08-03","ratio":0.600422},"history":[{"date":"2026-01-30","growth":3346.355,"dividend":5700.01,"ratio":0.587079},{"date":"2026-02-27","growth":3310.305,"dividend":5826.71,"ratio":0.568126},{"date":"2026-03-31","growth":3184.952,"dividend":5727.85,"ratio":0.556047},{"date":"2026-04-30","growth":3677.1485,"dividend":5865.07,"ratio":0.626957},{"date":"2026-05-29","growth":4037.951,"dividend":5578.69,"ratio":0.723817},{"date":"2026-06-30","growth":4342.7123,"dividend":5022.46,"ratio":0.86466},{"date":"2026-07-31","growth":3343.9641,"dividend":5569.41,"ratio":0.600422}],"events":[{"month":"2026-04","month_end_date":"2026-04-30","execution_date":"2026-05-06","ratio":0.626957,"kind":"rotate","side":"dividend","new_tiers":1},{"month":"2026-05","month_end_date":"2026-05-29","execution_date":"2026-06-01","ratio":0.723817,"kind":"rotate","side":"dividend","new_tiers":2}]}
+{"strategy":{"id":"cyb-dividend-fixed-v21-0375-0625","growth_levels":[0.375,0.325,0.275],"dividend_levels":[0.625,0.675,0.725]},"demo":true,"generated_at":"2026-07-31T18:30:00+08:00","calendar_source":"示例交易日历","price_sources":{"growth":"已核实历史创业板指数","dividend":"已核实历史中证红利价格指数"},"latest":{"date":"2026-07-31","growth":3343.9641,"dividend":5569.41,"ratio":0.600422},"current_state":{"direction":"dividend","cycle_side":"dividend","done":3},"forecast":{"is_confirmed":true,"signal_month":"2026-07","ratio":0.600422,"expected_execution":"2026-08-03","kind":"hold","side":"dividend","new_tiers":0,"reached_tiers":1,"previous_tiers":3,"monthly_buy_side":"dividend","active_cycle_done":3,"active_cycle_side":"dividend"},"last_confirmed":{"month":"2026-07","month_end_date":"2026-07-31","execution_date":"2026-08-03","ratio":0.600422},"pending_confirmed":{"month":"2026-07","month_end_date":"2026-07-31","execution_date":"2026-08-03","ratio":0.600422},"history":[{"date":"2026-01-30","growth":3346.355,"dividend":5700.01,"ratio":0.587079},{"date":"2026-02-27","growth":3310.305,"dividend":5826.71,"ratio":0.568126},{"date":"2026-03-31","growth":3184.952,"dividend":5727.85,"ratio":0.556047},{"date":"2026-04-30","growth":3677.1485,"dividend":5865.07,"ratio":0.626957},{"date":"2026-05-29","growth":4037.951,"dividend":5578.69,"ratio":0.723817},{"date":"2026-06-30","growth":4342.7123,"dividend":5022.46,"ratio":0.86466},{"date":"2026-07-31","growth":3343.9641,"dividend":5569.41,"ratio":0.600422}],"events":[{"month":"2026-04","month_end_date":"2026-04-30","execution_date":"2026-05-06","ratio":0.626957,"kind":"rotate","side":"dividend","new_tiers":1},{"month":"2026-05","month_end_date":"2026-05-29","execution_date":"2026-06-01","ratio":0.723817,"kind":"rotate","side":"dividend","new_tiers":2}]}
 </script>
 <script>
 (()=>{'use strict';
+const STRATEGY_ID='cyb-dividend-fixed-v21-0375-0625';
 const $=id=>document.getElementById(id), fmt=(n,d=2)=>Number(n).toLocaleString('zh-CN',{minimumFractionDigits:d,maximumFractionDigits:d}), yuan=n=>`¥ ${fmt(n,2)}`;
 const nameOf=x=>x==='growth'?'创业板指':x==='dividend'?'中证红利':'现金';
 let sourceData=null, latestPlan='', toastTimer;
 function toast(msg){const el=$('toast');el.textContent=msg;el.style.display='block';clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.style.display='none',2100)}
 function calcStale(data){const end=new Date(data.latest.date+'T16:00:00+08:00'),now=new Date(),gap=(now-end)/86400000;return !Number.isFinite(gap)||gap>7||gap < -1}
-function phase(r){if(r<.3)return '创业板方向 · 第3档';if(r<.35)return '创业板方向 · 第2档';if(r<.4)return '创业板方向 · 第1档';if(r>.7)return '红利方向 · 第3档';if(r>.65)return '红利方向 · 第2档';if(r>.6)return '红利方向 · 第1档';return '中性区间 · 保持方向'}
+function phase(r){if(r<.275)return '创业板方向 · 第3档';if(r<.325)return '创业板方向 · 第2档';if(r<.375)return '创业板方向 · 第1档';if(r>.725)return '红利方向 · 第3档';if(r>.675)return '红利方向 · 第2档';if(r>.625)return '红利方向 · 第1档';return '中性区间 · 保持方向'}
 function draw(data){const rows=(data.history||[]).filter(x=>Number.isFinite(x.ratio)).slice(-160);$('chartSpan').textContent=`${rows.length}个${data.demo?'历史示例':'交易日'}数据点`;
 const svg=$('ratioChart');svg.replaceChildren();if(rows.length<2)return;const ns='http://www.w3.org/2000/svg',mk=(tag,attr,text)=>{const e=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(attr||{}))e.setAttribute(k,v);if(text!==undefined)e.textContent=text;svg.appendChild(e);return e};
-const nums=rows.map(x=>x.ratio),mn=Math.min(...nums,.3)-.025,mx=Math.max(...nums,.7)+.025,x0=40,x1=590,y0=13,y1=198,x=i=>x0+i*(x1-x0)/(rows.length-1),y=v=>y1-(v-mn)/(mx-mn)*(y1-y0);
-for(let t of [.3,.35,.4,.6,.65,.7]){const yy=y(t),major=[.3,.4,.6,.7].includes(t);mk('line',{x1:x0,y1:yy,x2:x1,y2:yy,stroke:major?'#9a6f3f':'#243d4e','stroke-width':major?1.3:1,'stroke-dasharray':'4 5',opacity:major?.9:.6});if(major)mk('text',{x:2,y:yy+4,fill:'#89a0b2','font-size':12},t.toFixed(2))}
+const nums=rows.map(x=>x.ratio),mn=Math.min(...nums,.275)-.025,mx=Math.max(...nums,.725)+.025,x0=40,x1=590,y0=13,y1=198,x=i=>x0+i*(x1-x0)/(rows.length-1),y=v=>y1-(v-mn)/(mx-mn)*(y1-y0);
+for(let t of [.275,.325,.375,.625,.675,.725]){const yy=y(t),major=[.275,.375,.625,.725].includes(t);mk('line',{x1:x0,y1:yy,x2:x1,y2:yy,stroke:major?'#9a6f3f':'#243d4e','stroke-width':major?1.3:1,'stroke-dasharray':'4 5',opacity:major?.9:.6});if(major)mk('text',{x:2,y:yy+4,fill:'#89a0b2','font-size':12},t.toFixed(2))}
 const pts=nums.map((n,i)=>`${x(i)},${y(n)}`).join(' ');mk('polyline',{points:pts,fill:'none',stroke:'#52e2c3','stroke-width':2.8,'stroke-linecap':'round','stroke-linejoin':'round'});mk('circle',{cx:x(rows.length-1),cy:y(nums.at(-1)),r:5,fill:'#9affdf',stroke:'#0b2330','stroke-width':2});
 const endLabels=[0,Math.floor((rows.length-1)/2),rows.length-1];for(const i of endLabels)mk('text',{x:x(i),y:220,fill:'#8fa8b9','font-size':11,'text-anchor':i===0?'start':i===rows.length-1?'end':'middle'},rows[i].date.slice(2,7).replace('-','/'))}
-function display(data){sourceData=data;window.__rotationMarket=data;window.dispatchEvent(new CustomEvent('rotation-market-updated',{detail:data}));const l=data.latest,f=data.forecast,stale=data.demo||calcStale(data);
+function display(data){sourceData=data;window.__rotationMarket=data;window.dispatchEvent(new CustomEvent('rotation-market-updated',{detail:data}));const l=data.latest,f=data.forecast,stale=data.demo||calcStale(data)||data.strategy?.id!==STRATEGY_ID;
 $('ratio').innerHTML=fmt(l.ratio,4)+'<small> 倍</small>';$('growth').textContent=fmt(l.growth,2);$('dividend').textContent=fmt(l.dividend,2);
 $('ratioTag').lastElementChild.textContent=phase(l.ratio);$('latestDate').textContent=`${l.date} 收盘 · 数据生成 ${data.generated_at||'未提供'}`;
 $('tiers').textContent=`${f.reached_tiers??0} / 3`;
 $('tierSub').textContent=f.side?`方向：${nameOf(f.side)} · 本轮已执行 ${f.active_cycle_done??0} 档`:'中性区域，等待有效突破';
 let actionText='',explain='';if(f.kind==='rotate'&&f.new_tiers>0){actionText=`转入 ${nameOf(f.side)}`;explain=`本月比值达到${f.reached_tiers}档，根据已执行记录，下月需要新增${f.new_tiers}档。每档为该轮初始锁定份额的1/3。`}
 else if(f.side){actionText=`定投 ${nameOf(f.monthly_buy_side||f.side)}`;explain='没有新达到的转换档位，已有仓位不重复买卖；按最近一次有效方向安排每月新增定投。'}
-else{actionText=f.monthly_buy_side?`定投 ${nameOf(f.monthly_buy_side)}`:'继续持有现金';explain='当前位于0.40～0.60中性区，不新增轮动档位；定投遵循最近一次已确认方向。'}
+else{actionText=f.monthly_buy_side?`定投 ${nameOf(f.monthly_buy_side)}`:'继续持有现金';explain='当前位于0.375～0.625中性区，不新增轮动档位；定投遵循最近一次已确认方向。'}
 $('recommendation').textContent=actionText;$('recDetails').textContent=explain;
 $('forecastTag').textContent=f.is_confirmed?'月末已锁定':'月中临时预判';
 $('executionDate').textContent=f.expected_execution?`预计执行日：${f.expected_execution} · ${f.is_confirmed?'正式月末收盘信号':'如果本月末仍保持该比值'}`:'预计执行日：交易日历待核验';
 $('warning').style.display='block';
 if(data.demo)$('warning').innerHTML='<strong>历史演示数据，自动更新尚未启用！</strong> 截止 2026-07-31，不能作为当前月交易依据。部署 GitHub Pages 并执行首次更新后会自动替换。';
-else if(stale)$('warning').innerHTML='<strong>注意：行情可能已过期！</strong> 当前显示最近成功发布的数据，绝不能直接依据本页执行交易；请检查仓库 Actions 是否更新失败。';
+else if(stale)$('warning').innerHTML='<strong>注意：行情过期或仍是旧版阈值信号！</strong> 需要重新发布0.375/0.625规则的完整信号，不得直接依据旧信号交易。';
 else $('warning').style.display='none';
 $('copyPlan').disabled=stale;$('copyPlan').title=stale?'历史示例或过期数据不提供当前交易复制指令':'';
 latestPlan=`【轮动雷达 | ${l.date}】\n399006：${fmt(l.growth)}\n000922：${fmt(l.dividend)}\n比值：${fmt(l.ratio,4)}\n${f.is_confirmed?'正式月末信号':'月中预判'}：${actionText}\n新增档位：${f.new_tiers??0}\n预计执行：${f.expected_execution||'待交易日历确认'}\n风险提示：数据更新 ${data.generated_at}；仅供规则计算，不自动下单。`;
@@ -196,11 +197,11 @@ for(const url of feeds){
       const bytes=Uint8Array.from(atob(x.content.replace(/\s/g,'')),c=>c.charCodeAt(0));
       x=JSON.parse(new TextDecoder().decode(bytes));
     }
-    if(x?.latest?.date&&x?.forecast&&Array.isArray(x?.history)){
+    if(x?.latest?.date&&x?.forecast&&Array.isArray(x?.history)&&x.strategy?.id===STRATEGY_ID){
       // 不能由演示/过期数据覆盖已取得的较新有效行情。
       if(!data?.latest?.date||x.latest.date>data.latest.date||
          (x.latest.date===data.latest.date&&!x.demo&&data.demo))data=x;
-      if(!x.demo)break;
+      if(!x.demo&&x.strategy?.id===STRATEGY_ID)break;
     }
   }catch(e){console.warn('行情源不可用，尝试备用地址',url,e)}
 }
