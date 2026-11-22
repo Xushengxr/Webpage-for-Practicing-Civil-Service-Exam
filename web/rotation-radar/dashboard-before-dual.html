@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>轮动雷达 · 月频分批调仓策略面板（自动收盘行情）</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'sans-serif'],
+          },
+          colors: {
+            navy: {
+              950: '#0a1120',
+              900: '#0f172a',
+              800: '#1e293b',
+              700: '#334155'
+            }
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+    input[type="range"] {
+      accent-color: #1d4ed8;
+    }
+    .tabular-nums {
+      font-variant-numeric: tabular-nums;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased selection:bg-blue-100 selection:text-blue-900">
+
+  <!-- ======================================================================= -->
+  <!-- 顶部标题栏 & 核心状态摘要（深蓝金融级顶栏）                                 -->
+  <!-- ======================================================================= -->
+  <header class="bg-gradient-to-r from-navy-950 via-navy-900 to-slate-900 text-white border-b border-slate-800 shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 space-y-4">
+      <!-- 第一行：品牌标题 + 策略徽章 + 重置按钮 -->
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-emerald-400 flex items-center justify-center shadow-lg shadow-blue-900/40 shrink-0">
+            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+            </svg>
+          </div>
+          <div class="min-w-0">
+            <div class="flex flex-wrap items-center gap-2">
+              <h1 class="text-base sm:text-xl font-bold tracking-tight text-white truncate">
+                轮动雷达 · 创业板指 × 中证红利 · 分月调仓看板
+              </h1>
+              <span id="headerBatchBadge" class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-200 border border-blue-400/30">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                分3次每月初转入
+              </span>
+            </div>
+            <p class="text-xs text-slate-400 mt-0.5">
+              月末确认、次月首个交易日执行；本页分月转仓为独立模拟，正式V2.1三档规则保存在旧版面板
+            </p>
+          </div>
+        </div>
+
+        <button id="btnResetDefaults" type="button"
+          class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-200 bg-white/10 hover:bg-white/20 active:bg-white/25 border border-white/10 transition cursor-pointer shrink-0">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
+          </svg>
+          恢复默认参数
+        </button>
+      </div>
+
+      <!-- 第二行：核心状态摘要条 -->
+      <div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-1">
+        <div class="rounded-xl bg-white/5 border border-white/10 px-3.5 py-2.5">
+          <div class="text-[11px] text-slate-400">最近共同收盘日</div>
+          <div id="topSnapshotDate" class="text-sm sm:text-base font-bold text-white mt-0.5 tabular-nums">核验中…</div>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 px-3.5 py-2.5">
+          <div class="text-[11px] text-slate-400">创业板指 (399006)</div>
+          <div id="topCybVal" class="text-sm sm:text-base font-bold text-emerald-400 mt-0.5 tabular-nums">2212.13</div>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 px-3.5 py-2.5">
+          <div class="text-[11px] text-slate-400">中证红利 (000922)</div>
+          <div id="topDivVal" class="text-sm sm:text-base font-bold text-amber-400 mt-0.5 tabular-nums">5529.78</div>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 px-3.5 py-2.5">
+          <div class="text-[11px] text-slate-400">最新收盘比值</div>
+          <div class="flex items-baseline gap-1.5 mt-0.5">
+            <span id="topRatioVal" class="text-sm sm:text-base font-extrabold text-white tabular-nums">0.4000</span>
+            <span id="topPctVal" class="text-[11px] font-medium text-blue-300 tabular-nums">分位 41.4%</span>
+          </div>
+        </div>
+        <div class="rounded-xl bg-white/5 border border-white/10 px-3.5 py-2.5 col-span-2 sm:col-span-1">
+          <div class="text-[11px] text-slate-400">当前策略区间</div>
+          <div id="topBandVal" class="text-sm sm:text-base font-bold text-blue-300 mt-0.5 tabular-nums">0.35 / 0.62</div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- 主内容容器 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-8">
+    <section aria-label="自动行情状态" class="space-y-2">
+      <div id="liveStatusBar" role="status" aria-live="polite" class="rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-950">正在连接原有 GitHub Actions 行情文件。数据核实前，当前交易指令仅作历史演示。</div>
+      <div id="liveStatusActions" class="text-xs text-slate-600 flex flex-wrap gap-x-3 gap-y-1 items-center">
+        <a href="./legacy.html" class="font-semibold text-blue-700 underline underline-offset-2">原V2.1三档轮动与个人持仓账本</a>
+        <span>数据更新：工作日北京时间约18:23 / 20:17；非盘中实时。月中收盘只作观察。</span>
+        <span>新面板为上传的“连续3个月分批转入”模拟方案，与原V2.1三档阈值规则不同。</span>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 模块一：下月初操作模拟台                                                -->
+    <!-- ===================================================================== -->
+    <section aria-label="下月初操作模拟台" class="space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+        <div>
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-blue-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+            MODULE 01 · 下一步实操指导
+          </span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mt-0.5">下月初操作模拟台</h2>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-500">输入模拟资金与当前点位，测算分3个月调仓金额。下月初实际交易应核对券商ETF价格、月末确认信号和持仓份额</p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+
+        <!-- 左侧输入区 (5 cols) -->
+        <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 flex flex-col justify-between space-y-5">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-100 pb-3">
+              <h3 class="text-sm font-bold text-slate-900">实盘账户与点位参数</h3>
+              <span class="text-[11px] font-medium px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">实时联动计算</span>
+            </div>
+
+            <!-- 资金输入 -->
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="inputCapital" class="block text-xs font-semibold text-slate-600 mb-1">模拟总资金</label>
+                <div class="relative">
+                  <span class="absolute left-3 top-2.5 text-xs font-semibold text-slate-400">¥</span>
+                  <input id="inputCapital" type="number" step="1000" min="0" value="50000"
+                    class="w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-7 pr-7 py-2 text-sm font-bold text-slate-900 tabular-nums focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition" />
+                  <span class="absolute right-2.5 top-2.5 text-xs text-slate-400">元</span>
+                </div>
+              </div>
+              <div>
+                <label for="inputMonthly" class="block text-xs font-semibold text-slate-600 mb-1">每月追加定投</label>
+                <div class="relative">
+                  <span class="absolute left-3 top-2.5 text-xs font-semibold text-slate-400">¥</span>
+                  <input id="inputMonthly" type="number" step="100" min="0" value="1000"
+                    class="w-full rounded-xl border border-slate-200 bg-slate-50/60 pl-7 pr-7 py-2 text-sm font-bold text-slate-900 tabular-nums focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition" />
+                  <span class="absolute right-2.5 top-2.5 text-xs text-slate-400">元</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 点位输入 -->
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label for="inputCyb" class="block text-xs font-semibold text-slate-600 mb-1">当前创业板指点位</label>
+                <div class="relative">
+                  <input id="inputCyb" type="number" step="0.01" min="100" value="2212.13"
+                    class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2 text-sm font-bold text-slate-900 tabular-nums focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition" />
+                  <span class="absolute right-2.5 top-2.5 text-xs text-slate-400">点</span>
+                </div>
+              </div>
+              <div>
+                <label for="inputDiv" class="block text-xs font-semibold text-slate-600 mb-1">当前中证红利点位</label>
+                <div class="relative">
+                  <input id="inputDiv" type="number" step="0.01" min="100" value="5529.78"
+                    class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2 text-sm font-bold text-slate-900 tabular-nums focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition" />
+                  <span class="absolute right-2.5 top-2.5 text-xs text-slate-400">点</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 当前持仓状态选择器 -->
+            <div>
+              <label for="selectHolding" class="block text-xs font-semibold text-slate-600 mb-1.5">模拟持仓状态</label>
+              <select id="selectHolding"
+                class="w-full rounded-xl border border-slate-200 bg-slate-50/60 px-3 py-2.5 text-sm font-semibold text-slate-800 focus:bg-white focus:border-blue-600 focus:ring-2 focus:ring-blue-100 outline-none transition cursor-pointer">
+                <option value="cash">刚建仓 / 全仓现金</option>
+                <option value="div" selected>当前全仓中证红利（默认）</option>
+                <option value="cyb">当前全仓创业板指</option>
+                <option value="to_cyb_1">正在执行切入创业板第 1/3 后</option>
+                <option value="to_cyb_2">正在执行切入创业板第 2/3 后</option>
+                <option value="to_div_1">正在执行切入红利第 1/3 后</option>
+                <option value="to_div_2">正在执行切入红利第 2/3 后</option>
+              </select>
+            </div>
+
+            <!-- 快捷比值模拟按钮（便于用户演练触发调仓时的指令） -->
+            <div class="bg-slate-50 rounded-xl border border-slate-200/80 p-3 space-y-2">
+              <div class="flex items-center justify-between text-[11px] font-semibold text-slate-500">
+                <span>快捷场景演练（点击试算不同点位指令）</span>
+              </div>
+              <div class="grid grid-cols-3 gap-1.5">
+                <button id="simBtnCurrent" type="button" class="px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-white border border-slate-200 hover:border-blue-400 text-slate-700 transition cursor-pointer">
+                  当前 0.4000
+                </button>
+                <button id="simBtnLow" type="button" class="px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-emerald-50 border border-emerald-200 hover:bg-emerald-100 text-emerald-800 transition cursor-pointer">
+                  模拟触底 ≤下轨
+                </button>
+                <button id="simBtnHigh" type="button" class="px-2 py-1.5 rounded-lg text-[11px] font-semibold bg-rose-50 border border-rose-200 hover:bg-rose-100 text-rose-800 transition cursor-pointer">
+                  模拟触顶 ≥上轨
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- 比值温度计微缩条 -->
+          <div class="pt-3 border-t border-slate-100 space-y-2">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-medium text-slate-500">当前比值区间位置</span>
+              <span id="consoleRatioBadge" class="font-bold tabular-nums text-slate-900">0.4000 (历史分位 41.4%)</span>
+            </div>
+            <div class="relative h-3 rounded-full bg-slate-200 overflow-visible">
+              <div id="miniGaugeTrack" class="absolute inset-0 rounded-full overflow-hidden flex"></div>
+              <div id="miniGaugePointer" class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-3.5 h-5 rounded bg-navy-900 border-2 border-white shadow transition-all duration-300" style="left: 25%;"></div>
+            </div>
+            <div class="flex justify-between text-[10px] text-slate-400 tabular-nums">
+              <span>0.25 (低估)</span>
+              <span id="gaugeLowerLabel" class="text-emerald-700 font-semibold">下轨 0.35</span>
+              <span id="gaugeUpperLabel" class="text-rose-700 font-semibold">上轨 0.62</span>
+              <span>0.85 (高估)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 右侧实时决策卡片组 (7 cols) -->
+        <div class="lg:col-span-7 space-y-4">
+
+          <!-- 卡片 1：下月初第1交易日核心操作指令 -->
+          <div class="bg-navy-900 text-white rounded-2xl p-5 shadow-md border border-slate-800 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span id="signalDot" class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+                <h3 class="text-sm sm:text-base font-bold tracking-tight">下月初（第1个交易日）具体执行指令</h3>
+              </div>
+              <span id="actionStatusPill" class="px-2.5 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-400/30">
+                持有观望 · 继续定投红利
+              </span>
+            </div>
+
+            <!-- 主指令说明 -->
+            <div id="primaryActionBox" class="rounded-xl bg-white/5 border border-white/10 p-4 text-sm leading-relaxed text-slate-100">
+              <!-- 由 JS 动态渲染 -->
+            </div>
+
+            <!-- 精确金额拆解 3 栏 -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="rounded-xl bg-white/5 border border-white/10 p-3">
+                <div class="text-[11px] text-slate-400">存量调仓动作</div>
+                <div id="actSwitchTitle" class="text-xs font-semibold text-slate-200 mt-1">无需卖出切换</div>
+                <div id="actSwitchAmt" class="text-lg font-extrabold text-white mt-0.5 tabular-nums">¥0</div>
+              </div>
+              <div class="rounded-xl bg-white/5 border border-white/10 p-3">
+                <div class="text-[11px] text-slate-400">下月初定投去向</div>
+                <div id="actDcaTarget" class="text-xs font-semibold text-amber-300 mt-1">买入中证红利 ETF</div>
+                <div id="actDcaAmt" class="text-lg font-extrabold text-white mt-0.5 tabular-nums">+¥1,000</div>
+              </div>
+              <div class="rounded-xl bg-white/5 border border-white/10 p-3">
+                <div class="text-[11px] text-slate-400">执行后目标持仓</div>
+                <div id="actAfterSplit" class="text-xs font-semibold text-blue-300 mt-1">创业板 0% / 红利 100%</div>
+                <div id="actAfterTotal" class="text-lg font-extrabold text-white mt-0.5 tabular-nums">¥51,000</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 卡片 2：3个月分批转入进度条与金额沙盘 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 class="text-sm font-bold text-slate-900">3个月分批转入进度条与金额沙盘</h3>
+                <p id="sandboxSubtitle" class="text-xs text-slate-500 mt-0.5">以当前 50,000 元 + 每月 1,000 元测算，触发调仓后连续3个月初完成切换</p>
+              </div>
+              <span id="sandboxDirBadge" class="text-xs font-semibold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700">
+                演练方向：切入创业板指
+              </span>
+            </div>
+
+            <!-- 进度条轨道 -->
+            <div class="relative pt-1">
+              <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                <div id="sandboxProgressBar" class="h-full bg-gradient-to-r from-blue-600 to-emerald-500 rounded-full transition-all duration-300" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- 3步沙盘卡片 -->
+            <div id="sandboxStepsGrid" class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <!-- 由 JS 动态渲染 第1月初 / 第2月初 / 第3月初 -->
+            </div>
+          </div>
+
+          <!-- 卡片 3：点位预警雷达 -->
+          <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5">
+            <div class="flex flex-wrap items-center justify-between gap-1 mb-3">
+              <h3 class="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-blue-600"></span>
+                点位预警雷达（券商条件单参考）
+              </h3>
+              <span class="text-[11px] text-slate-400">假设中证红利维持 <strong id="radarDivRef" class="text-slate-600 tabular-nums">5529.78</strong> 点不变</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- 下轨预警 -->
+              <div class="rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-3.5 flex items-center justify-between gap-2">
+                <div>
+                  <div class="text-xs font-bold text-emerald-900">▼ 触发下轨 (<span id="radarLowerRatio" class="tabular-nums">0.35</span>) · 启动切入创业板</div>
+                  <div class="text-xs text-slate-600 mt-1">创业板指跌至 <strong id="radarLowerCyb" class="text-base text-emerald-700 tabular-nums">1935.42</strong> 点</div>
+                  <div class="text-[11px] text-slate-400 mt-0.5">或红利涨至 <span id="radarLowerDiv" class="tabular-nums font-medium text-slate-600">6320.37</span> 点</div>
+                </div>
+                <div id="radarLowerDist" class="text-right shrink-0 px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold tabular-nums">
+                  -12.5%
+                </div>
+              </div>
+              <!-- 上轨预警 -->
+              <div class="rounded-xl border border-rose-200/80 bg-rose-50/40 p-3.5 flex items-center justify-between gap-2">
+                <div>
+                  <div class="text-xs font-bold text-rose-900">▲ 触发上轨 (<span id="radarUpperRatio" class="tabular-nums">0.62</span>) · 启动切入红利</div>
+                  <div class="text-xs text-slate-600 mt-1">创业板指涨至 <strong id="radarUpperCyb" class="text-base text-rose-700 tabular-nums">3428.46</strong> 点</div>
+                  <div class="text-[11px] text-slate-400 mt-0.5">或红利跌至 <span id="radarUpperDiv" class="tabular-nums font-medium text-slate-600">3567.95</span> 点</div>
+                </div>
+                <div id="radarUpperDist" class="text-right shrink-0 px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800 text-xs font-bold tabular-nums">
+                  +55.0%
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 模块二：历史月线回测对比引擎                                  -->
+    <!-- ===================================================================== -->
+    <section aria-label="2010-2026历史回测对比引擎" class="space-y-5 pt-2">
+      <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-3">
+        <div>
+          <span class="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-blue-700">
+            <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+            <span id="backtestCountTag">MODULE 02 · 月线回测引擎</span>
+          </span>
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mt-0.5"><span id="backtestDateTitle">历史月线回测对比</span></h2>
+          <p class="text-xs sm:text-sm text-slate-500 mt-0.5">
+            2010-06 起，模拟初始投入 <strong id="btCapLabel" class="text-slate-700 tabular-nums">¥50,000</strong> + 每月初追加 <strong id="btMonLabel" class="text-slate-700 tabular-nums">¥1,000</strong>（月线数据更新后自动重算；单次换仓费率按 0.2% 估算）
+          </p>
+        </div>
+      </div>
+
+      <!-- 交互控制栏 -->
+      <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-4 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <!-- 预设按钮 -->
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs font-semibold text-slate-500 mr-1">区间预设：</span>
+            <button data-preset="0.375,0.625" type="button" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition cursor-pointer">
+              原V2.1参考 0.375 / 0.625
+            </button>
+            <button data-preset="0.40,0.60" type="button" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition cursor-pointer">
+              经典区间 0.40 / 0.60
+            </button>
+            <button data-preset="0.35,0.62" type="button" class="preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold border transition cursor-pointer">
+              自定义示例 0.35 / 0.62
+            </button>
+          </div>
+
+          <!-- 分批次数切换 + 含息估算开关 -->
+          <div class="flex flex-wrap items-center gap-3">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-semibold text-slate-500">调仓分批：</span>
+              <div class="inline-flex rounded-lg bg-slate-100 p-0.5 text-xs">
+                <button data-batches="1" type="button" class="batch-btn px-2.5 py-1 rounded-md font-semibold transition cursor-pointer">1次(全仓)</button>
+                <button data-batches="2" type="button" class="batch-btn px-2.5 py-1 rounded-md font-semibold transition cursor-pointer">2次</button>
+                <button data-batches="3" type="button" class="batch-btn px-2.5 py-1 rounded-md font-semibold transition cursor-pointer">3次(默认)</button>
+                <button data-batches="4" type="button" class="batch-btn px-2.5 py-1 rounded-md font-semibold transition cursor-pointer">4次</button>
+              </div>
+            </div>
+
+            <!-- 含息估算开关 -->
+            <label class="inline-flex items-center gap-2 cursor-pointer select-none pl-2 border-l border-slate-200">
+              <input id="toggleDividend" type="checkbox" class="sr-only peer" />
+              <div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:bg-emerald-600 relative transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-4"></div>
+              <span class="text-xs font-semibold text-slate-700">含息估算 <span class="text-[11px] font-normal text-slate-400">(假设值：红利+4.5%/创业+0.8%)</span></span>
+            </label>
+          </div>
+        </div>
+
+        <!-- 下轨 / 上轨自定义滑块 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-3 border-t border-slate-100">
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-semibold text-emerald-800 whitespace-nowrap w-28">下轨 (切创业板)</span>
+            <input id="sliderLower" type="range" min="0.27" max="0.48" step="0.005" value="0.375" class="flex-1 cursor-pointer" />
+            <span id="labelLower" class="w-12 text-right text-sm font-extrabold text-emerald-700 tabular-nums">0.375</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-semibold text-rose-800 whitespace-nowrap w-28">上轨 (切中证红利)</span>
+            <input id="sliderUpper" type="range" min="0.52" max="0.77" step="0.005" value="0.625" class="flex-1 cursor-pointer" />
+            <span id="labelUpper" class="w-12 text-right text-sm font-extrabold text-rose-700 tabular-nums">0.625</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4张 KPI 对比卡片 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- KPI 1 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+          <div class="text-xs font-semibold text-slate-500">累计投入本金</div>
+          <div id="kpiInvested" class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1.5 tabular-nums">¥247,000</div>
+          <div id="kpiInvestedSub" class="text-xs text-slate-500 mt-1.5">初始 ¥50,000 + 197期 × ¥1,000</div>
+        </div>
+
+        <!-- KPI 2 -->
+        <div class="bg-gradient-to-br from-navy-900 to-blue-950 text-white rounded-2xl p-5 shadow-md">
+          <div class="flex items-center justify-between gap-2">
+            <span id="kpiAssetTitle" class="text-xs font-semibold text-blue-200">分3次调仓期末总资产</span>
+            <span id="kpiReturnBadge" class="text-xs font-bold px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 tabular-nums">+0.0%</span>
+          </div>
+          <div id="kpiFinalAsset" class="text-2xl sm:text-3xl font-extrabold mt-1.5 tabular-nums">--</div>
+          <div class="text-xs text-slate-300 mt-1.5 flex items-center justify-between">
+            <span>净盈利 <strong id="kpiNetProfit" class="text-white tabular-nums">--</strong></span>
+            <span id="kpiVsDivText" class="text-emerald-300 tabular-nums">--</span>
+          </div>
+        </div>
+
+        <!-- KPI 3 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+          <div class="text-xs font-semibold text-slate-500">年化内部收益率 (XIRR)</div>
+          <div id="kpiXirr" class="text-2xl sm:text-3xl font-extrabold text-blue-700 mt-1.5 tabular-nums">--</div>
+          <div id="kpiXirrCompare" class="text-xs text-slate-500 mt-1.5 tabular-nums">对比一次性全仓：--</div>
+        </div>
+
+        <!-- KPI 4 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 p-5 shadow-sm">
+          <div class="text-xs font-semibold text-slate-500">最大回撤 (TWR) 与操作次数</div>
+          <div id="kpiMaxDd" class="text-2xl sm:text-3xl font-extrabold text-rose-600 mt-1.5 tabular-nums">--</div>
+          <div id="kpiOpsCount" class="text-xs text-slate-500 mt-1.5 tabular-nums">累计分批操作 -- 次（-- 轮切换）</div>
+        </div>
+      </div>
+
+      <!-- 双图表展示 -->
+      <p id="backtestPeriodNote" class="text-xs text-slate-500">历史月线回测采用每月收盘点位；下月首交易日成交价以上月末收盘价近似代替，并非实际ETF可实现收益。</p>
+      <div class="grid grid-cols-1 gap-5">
+        <!-- 图表 1：账户总资产成长曲线 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">账户总资产成长曲线对比（按最新完整月度数据更新）</h3>
+              <p class="text-xs text-slate-500">同屏对比：分批每月初调仓 vs 一次性全仓调仓 vs 纯定投中证红利 vs 累计投入本金</p>
+            </div>
+            <div class="inline-flex rounded-lg bg-slate-100 p-0.5 text-xs shrink-0 self-start">
+              <button id="scaleLinearBtn" type="button" class="px-2.5 py-1 rounded-md font-semibold transition cursor-pointer">线性坐标</button>
+              <button id="scaleLogBtn" type="button" class="px-2.5 py-1 rounded-md font-semibold transition cursor-pointer">对数坐标</button>
+            </div>
+          </div>
+          <div class="relative w-full h-72 sm:h-96">
+            <canvas id="assetChart"></canvas>
+          </div>
+        </div>
+
+        <!-- 图表 2：历史比值走势 + 上下轨 -->
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+            <div>
+              <h3 class="text-base font-bold text-slate-900">创业板指 / 中证红利 历史比值走势与触发区间</h3>
+              <p class="text-xs text-slate-500">绿色虚线为下轨（触发切入创业板），红色虚线为上轨（触发切入中证红利），圆点为历史触发信号月末</p>
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+              <span class="inline-flex items-center gap-1.5 text-emerald-700 font-semibold">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>启动切创业板
+              </span>
+              <span class="inline-flex items-center gap-1.5 text-rose-700 font-semibold">
+                <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>启动切红利
+              </span>
+            </div>
+          </div>
+          <div class="relative w-full h-72 sm:h-80">
+            <canvas id="ratioChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 模块三：历史分批调仓明细表                                              -->
+    <!-- ===================================================================== -->
+    <section aria-label="历史分批调仓明细表" class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+      <div class="p-5 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div>
+          <span class="text-xs font-bold uppercase tracking-wider text-blue-700">MODULE 03 · 完整交易流水</span>
+          <h3 class="text-lg font-bold text-slate-900 mt-0.5">历史分批调仓明细表</h3>
+          <p class="text-xs text-slate-500 mt-0.5">展示每次信号触发后，连续分批在每月初执行转入的详细仓位与资金记录</p>
+        </div>
+
+        <!-- 方向筛选按钮组 -->
+        <div class="flex flex-wrap items-center gap-2">
+          <div class="inline-flex rounded-lg bg-slate-100 p-0.5 text-xs">
+            <button data-filter="all" type="button" class="log-filter-btn px-2.5 py-1.5 rounded-md font-semibold transition cursor-pointer">全部记录</button>
+            <button data-filter="cyb" type="button" class="log-filter-btn px-2.5 py-1.5 rounded-md font-semibold transition cursor-pointer">切入创业板</button>
+            <button data-filter="div" type="button" class="log-filter-btn px-2.5 py-1.5 rounded-md font-semibold transition cursor-pointer">切入红利</button>
+          </div>
+          <span id="logCountBadge" class="text-xs font-bold px-2.5 py-1.5 rounded-lg bg-blue-50 text-blue-700 tabular-nums">共 0 笔</span>
+        </div>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left border-collapse min-w-[700px]">
+          <thead>
+            <tr class="bg-slate-50 text-[11px] font-bold text-slate-500 uppercase tracking-wider border-b border-slate-200/80">
+              <th class="py-3 px-4">信号月末</th>
+              <th class="py-3 px-3">执行月初</th>
+              <th class="py-3 px-3 text-right">当时比值</th>
+              <th class="py-3 px-3 text-center">批次进度</th>
+              <th class="py-3 px-3">转入方向</th>
+              <th class="py-3 px-3 text-right">调仓后创业板仓位</th>
+              <th class="py-3 px-3 text-right">单次调仓金额</th>
+              <th class="py-3 px-4 text-right">当时总资产</th>
+            </tr>
+          </thead>
+          <tbody id="tradeLogBody" class="divide-y divide-slate-100 text-xs sm:text-sm">
+            <!-- 由 JS 动态渲染 -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 折叠/展开底栏 -->
+      <div id="logFooterBar" class="hidden px-5 py-3 bg-slate-50/70 border-t border-slate-100 text-center">
+        <button id="btnToggleLogExpand" type="button" class="text-xs font-semibold text-blue-700 hover:text-blue-900 transition cursor-pointer">
+          展开全部记录
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================================================================== -->
+    <!-- 模块四：每月初执行 SOP 清单 & 常用 ETF 参考                             -->
+    <!-- ===================================================================== -->
+    <section aria-label="每月初执行SOP与ETF参考" class="grid grid-cols-1 lg:grid-cols-12 gap-5 pb-10">
+
+      <!-- 左侧：可勾选 4步 SOP Checklist (7 cols) -->
+      <div class="lg:col-span-7 bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 space-y-4">
+        <div class="flex items-center justify-between gap-2">
+          <div>
+            <span class="text-xs font-bold uppercase tracking-wider text-blue-700">MODULE 04 · 纪律执行</span>
+            <h3 class="text-lg font-bold text-slate-900 mt-0.5">每月初执行 SOP 操作清单</h3>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="sopProgressBadge" class="text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 tabular-nums">已完成 0 / 4</span>
+            <button id="btnResetSop" type="button" class="text-xs font-medium text-slate-400 hover:text-slate-700 cursor-pointer">清空勾选</button>
+          </div>
+        </div>
+
+        <div id="sopChecklist" class="space-y-2.5">
+          <!-- Step 1 -->
+          <label class="sop-item flex items-start gap-3 p-3.5 rounded-xl border border-slate-200/80 hover:border-blue-300 bg-slate-50/40 transition cursor-pointer select-none">
+            <input type="checkbox" class="sop-checkbox mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" />
+            <div class="flex-1">
+              <div class="sop-title text-sm font-bold text-slate-900">1. 月末收盘确认比值（非月中快照）</div>
+              <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">每月最后一个交易日收盘后，将创业板指（399006）与中证红利（000922）收盘点位填入顶部指令台，确认是否触及上下轨。</p>
+            </div>
+          </label>
+          <!-- Step 2 -->
+          <label class="sop-item flex items-start gap-3 p-3.5 rounded-xl border border-slate-200/80 hover:border-blue-300 bg-slate-50/40 transition cursor-pointer select-none">
+            <input type="checkbox" class="sop-checkbox mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" />
+            <div class="flex-1">
+              <div class="sop-title text-sm font-bold text-slate-900">2. 每月初第 1 个交易日挂单执行 1/3 转入</div>
+              <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">若已触发换仓或正处于 3 个月过渡期内，在次月第 1 个交易日盘中（如 10:00–14:30 流动性充裕时段）卖出对应原标的并买入目标标的。</p>
+            </div>
+          </label>
+          <!-- Step 3 -->
+          <label class="sop-item flex items-start gap-3 p-3.5 rounded-xl border border-slate-200/80 hover:border-blue-300 bg-slate-50/40 transition cursor-pointer select-none">
+            <input type="checkbox" class="sop-checkbox mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" />
+            <div class="flex-1">
+              <div class="sop-title text-sm font-bold text-slate-900">3. 同步转入 1,000 元月度定投</div>
+              <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">将每月新增的 1,000 元直接买入当前的「目标方向标的」（过渡期内同样直接买新目标标的，减少来回交易摩擦与手续费）。</p>
+            </div>
+          </label>
+          <!-- Step 4 -->
+          <label class="sop-item flex items-start gap-3 p-3.5 rounded-xl border border-slate-200/80 hover:border-blue-300 bg-slate-50/40 transition cursor-pointer select-none">
+            <input type="checkbox" class="sop-checkbox mt-0.5 w-4 h-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" />
+            <div class="flex-1">
+              <div class="sop-title text-sm font-bold text-slate-900">4. 核对持仓比例并更新预警线</div>
+              <p class="text-xs text-slate-500 mt-0.5 leading-relaxed">成交后核对账户内创业板 ETF 与中证红利 ETF 的市值占比是否符合 33.3% / 66.7% / 100% 计划，随后安心持有至下月末。</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- 右侧：常用场内 ETF 参考标的 (5 cols) -->
+      <div class="lg:col-span-5 bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5 flex flex-col justify-between space-y-4">
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-bold text-slate-900">常用场内 ETF 参考</h3>
+            <span class="text-[11px] font-semibold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700">场内免印花税</span>
+          </div>
+
+          <div class="space-y-3">
+            <!-- 创业板 ETF -->
+            <div class="rounded-xl border border-emerald-200/80 bg-emerald-50/40 p-4 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-emerald-900">跟踪创业板指 (399006)</span>
+                <span class="text-[11px] text-emerald-700 font-medium">成长风格代表</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-1">
+                <div class="bg-white rounded-lg border border-emerald-200/70 p-2.5">
+                  <div class="text-xs font-extrabold text-slate-900 tabular-nums">159915</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">易方达创业板ETF</div>
+                </div>
+                <div class="bg-white rounded-lg border border-emerald-200/70 p-2.5">
+                  <div class="text-xs font-extrabold text-slate-900 tabular-nums">159952</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">广发创业板ETF</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 中证红利 ETF -->
+            <div class="rounded-xl border border-amber-200/80 bg-amber-50/40 p-4 space-y-2">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-amber-900">跟踪中证红利 (000922)</span>
+                <span class="text-[11px] text-amber-700 font-medium">高股息价值代表</span>
+              </div>
+              <div class="grid grid-cols-2 gap-2 pt-1">
+                <div class="bg-white rounded-lg border border-amber-200/70 p-2.5">
+                  <div class="text-xs font-extrabold text-slate-900 tabular-nums">515080</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">招商中证红利ETF</div>
+                </div>
+                <div class="bg-white rounded-lg border border-amber-200/70 p-2.5">
+                  <div class="text-xs font-extrabold text-slate-900 tabular-nums">515180</div>
+                  <div class="text-[11px] text-slate-500 mt-0.5">易方达中证红利ETF</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-xl bg-slate-50 border border-slate-200/80 p-3.5 text-[11px] text-slate-500 leading-relaxed">
+          <strong class="text-slate-700">风险提示与说明：</strong>本看板基于2010年6月起的月度价格指数数据进行策略模拟，默认单次换仓成本按 0.2% 计。历史回测收益不代表未来表现，本页价格指数回测不等于含息ETF实盘收益；ETF代码仅为示例，不构成投资建议。
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- ======================================================================= -->
+  <!-- 核心策略逻辑与 198 期真实历史回测引擎脚本                                   -->
+  <!-- ======================================================================= -->
+  <script>
+    // 198 期完整真实历史月线数据：[年月, 创业板指收盘, 中证红利收盘]
+    let RAW_DATA = [["2010-06",919.31,2508.12],["2010-07",968.43,2797.42],["2010-08",1025.57,2840.62],["2010-09",942.54,2842.85],["2010-10",1064.52,3250.08],["2010-11",1181.5,3040.73],["2010-12",1137.66,3092.6],["2011-01",1029.12,3043.73],["2011-02",1099.78,3226.03],["2011-03",1008.3,3234.11],["2011-04",912.72,3211.36],["2011-05",846.32,3016.73],["2011-06",845.92,3027.75],["2011-07",913.28,2951.43],["2011-08",921.5,2800.04],["2011-09",791.13,2595.0],["2011-10",852.8,2673.53],["2011-11",838.11,2526.56],["2011-12",729.5,2363.78],["2012-01",648.68,2490.31],["2012-02",735.34,2625.79],["2012-03",678.52,2463.93],["2012-04",685.13,2604.71],["2012-05",734.45,2580.99],["2012-06",726.68,2394.1],["2012-07",676.96,2271.36],["2012-08",706.62,2168.27],["2012-09",689.64,2242.93],["2012-10",691.65,2213.34],["2012-11",606.77,2122.62],["2012-12",713.86,2530.56],["2013-01",776.0,2747.54],["2013-02",861.1,2712.25],["2013-03",866.46,2522.29],["2013-04",889.38,2474.5],["2013-05",1073.02,2613.04],["2013-06",1011.66,2182.98],["2013-07",1134.02,2153.9],["2013-08",1185.14,2271.29],["2013-09",1367.91,2368.54],["2013-10",1235.56,2343.25],["2013-11",1366.83,2379.23],["2013-12",1304.44,2273.68],["2014-01",1495.98,2208.28],["2014-02",1434.89,2276.91],["2014-03",1327.8,2244.32],["2014-04",1283.21,2215.1],["2014-05",1318.13,2204.89],["2014-06",1404.71,2232.08],["2014-07",1344.54,2450.5],["2014-08",1424.47,2462.89],["2014-09",1540.87,2629.08],["2014-10",1513.27,2691.59],["2014-11",1570.85,2923.64],["2014-12",1471.76,3448.81],["2015-01",1680.58,3452.85],["2015-02",1928.04,3522.47],["2015-03",2335.17,4167.37],["2015-04",2857.89,4955.86],["2015-05",3542.84,5369.28],["2015-06",2858.61,5118.2],["2015-07",2539.84,4346.63],["2015-08",1996.86,3784.07],["2015-09",2082.67,3591.53],["2015-10",2478.28,4016.33],["2015-11",2672.58,4232.35],["2015-12",2714.05,4375.17],["2016-01",1994.06,3430.87],["2016-02",1880.66,3395.02],["2016-03",2238.29,3793.31],["2016-04",2138.74,3751.26],["2016-05",2159.8,3720.26],["2016-06",2227.79,3703.5],["2016-07",2122.41,3840.54],["2016-08",2191.76,3986.49],["2016-09",2149.9,3925.2],["2016-10",2159.76,4031.49],["2016-11",2183.05,4250.25],["2016-12",1962.06,4040.73],["2017-01",1886.23,4157.87],["2017-02",1927.16,4275.43],["2017-03",1907.34,4323.96],["2017-04",1850.73,4302.84],["2017-05",1763.73,4338.31],["2017-06",1818.07,4527.24],["2017-07",1736.3,4599.89],["2017-08",1849.38,4653.35],["2017-09",1866.98,4672.25],["2017-10",1869.79,4767.55],["2017-11",1770.3,4725.78],["2017-12",1752.65,4750.79],["2018-01",1735.06,5071.81],["2018-02",1753.63,4789.78],["2018-03",1900.48,4601.87],["2018-04",1805.6,4440.9],["2018-05",1743.74,4559.62],["2018-06",1606.72,4187.02],["2018-07",1561.26,4207.78],["2018-08",1435.2,3970.52],["2018-09",1411.34,4108.73],["2018-10",1275.57,3808.41],["2018-11",1329.39,3846.95],["2018-12",1250.53,3836.87],["2019-01",1227.99,4012.07],["2019-02",1535.68,4440.87],["2019-03",1693.55,4742.96],["2019-04",1623.78,4735.74],["2019-05",1483.66,4469.51],["2019-06",1511.51,4406.91],["2019-07",1570.39,4350.95],["2019-08",1610.9,4196.77],["2019-09",1627.54,4193.89],["2019-10",1671.31,4220.22],["2019-11",1664.9,4183.41],["2019-12",1798.12,4440.59],["2020-01",1927.74,4318.04],["2020-02",2071.57,4189.41],["2020-03",1871.92,3975.14],["2020-04",2069.43,4090.12],["2020-05",2086.67,4002.18],["2020-06",2438.2,4089.54],["2020-07",2795.4,4468.9],["2020-08",2728.31,4610.92],["2020-09",2574.76,4395.75],["2020-10",2655.86,4433.77],["2020-11",2631.89,4817.82],["2020-12",2966.26,4595.59],["2021-01",3128.86,4431.62],["2021-02",2914.11,4705.62],["2021-03",2758.5,4827.2],["2021-04",3091.4,4956.5],["2021-05",3309.07,5204.73],["2021-06",3477.18,5153.4],["2021-07",3440.18,4858.43],["2021-08",3214.12,5385.98],["2021-09",3244.65,5245.35],["2021-10",3350.66,4964.67],["2021-11",3495.59,5044.12],["2021-12",3322.67,5209.9],["2022-01",2908.94,5009.74],["2022-02",2881.31,5219.15],["2022-03",2659.49,5303.28],["2022-04",2319.14,5019.23],["2022-05",2405.08,5070.53],["2022-06",2810.6,5106.47],["2022-07",2670.45,4921.72],["2022-08",2570.42,5009.62],["2022-09",2288.97,4869.99],["2022-10",2265.08,4562.0],["2022-11",2345.31,5120.05],["2022-12",2346.77,4925.86],["2023-01",2580.84,5099.71],["2023-02",2429.03,5245.94],["2023-03",2399.5,5175.89],["2023-04",2324.72,5414.95],["2023-05",2193.41,5214.21],["2023-06",2215.0,5072.55],["2023-07",2236.67,5278.66],["2023-08",2102.57,5060.9],["2023-09",2003.91,5161.13],["2023-10",1968.23,4998.89],["2023-11",1922.59,5008.61],["2023-12",1891.37,4969.67],["2024-01",1573.37,5079.34],["2024-02",1807.03,5414.02],["2024-03",1818.2,5380.73],["2024-04",1858.39,5499.66],["2024-05",1805.11,5669.49],["2024-06",1683.43,5354.83],["2024-07",1688.14,5114.86],["2024-08",1580.46,4946.1],["2024-09",2175.09,5699.29],["2024-10",2164.46,5319.41],["2024-11",2224.0,5392.24],["2024-12",2141.6,5581.5],["2025-01",2063.82,5397.84],["2025-02",2170.39,5311.65],["2025-03",2103.7,5407.99],["2025-04",1948.03,5341.77],["2025-05",1993.19,5445.8],["2025-06",2153.01,5410.26],["2025-07",2328.31,5484.71],["2025-08",2890.12,5538.04],["2025-09",3238.16,5461.08],["2025-10",3187.53,5627.67],["2025-11",3052.59,5545.84],["2025-12",3203.17,5503.98],["2026-01",3346.36,5700.01],["2026-02",3310.3,5826.71],["2026-03",3184.95,5727.85],["2026-04",3677.15,5865.07],["2026-05",4037.95,5578.69],["2026-06",4342.71,5022.46],["2026-07",3343.96,5569.41],["2026-08",3438.68,5718.42],["2026-09",3135.28,5493.34],["2026-10",2413.63,5592.45],["2026-11",2212.13,5529.78]];
+
+    let HIST_RATIOS = RAW_DATA.map(d => d[1] / d[2]);
+    const FEE_RATE = 0.002; // 单次换仓交易成本 0.2%
+
+    // 全局响应式状态
+    const state = {
+      capital: 50000,
+      monthly: 1000,
+      cyb: 2212.13,
+      div: 5529.78,
+      holding: 'div',        // 默认：当前全仓中证红利
+      lower: 0.375,           // 默认 V2.1 下轨
+      upper: 0.625,           // 默认 V2.1 上轨
+      batches: 3,            // 默认分3次每月初转入
+      includeDiv: false,     // 是否计入股息估算
+      yScale: 'linear',      // 'linear' | 'logarithmic'
+      logFilter: 'all',      // 'all' | 'cyb' | 'div'
+      logExpanded: false
+    };
+
+    let assetChart = null;
+    let ratioChart = null;
+
+    // =========================================================================
+    // 工具函数
+    // =========================================================================
+    function fmtCNY(val) {
+      return '¥' + Math.round(val).toLocaleString('zh-CN');
+    }
+
+    function fmtPct(val, digits = 1, showPlus = false) {
+      const prefix = showPlus && val > 0 ? '+' : '';
+      return prefix + val.toFixed(digits) + '%';
+    }
+
+    function calcPercentile(ratio) {
+      const cnt = HIST_RATIOS.filter(r => r <= ratio).length;
+      return (cnt / HIST_RATIOS.length) * 100;
+    }
+
+    function nextMonthStr(ym) {
+      const [y, m] = ym.split('-').map(Number);
+      if (m === 12) return `${y + 1}-01`;
+      return `${y}-${String(m + 1).padStart(2, '0')}`;
+    }
+
+    /**
+     * 二分法计算定投现金流年化内部收益率 XIRR（月频复利）
+     */
+    function calcMonthlyXIRR(initCap, monthly, months, finalVal) {
+      if (initCap + monthly * months <= 0 || finalVal <= 0) return 0;
+      function fvDiff(r) {
+        const rm = Math.pow(1 + r, 1 / 12) - 1;
+        let fv = initCap * Math.pow(1 + rm, months);
+        if (Math.abs(rm) < 1e-9) {
+          fv += monthly * months;
+        } else {
+          // t=1..months 各月初投入（共 months 笔，复利 months-t+1 或 months-t，这里与回测 t=1..197 一致）
+          fv += monthly * ((Math.pow(1 + rm, months) - 1) / rm) * (1 + rm);
+        }
+        return fv - finalVal;
+      }
+      let lo = -0.95, hi = 3.0;
+      for (let i = 0; i < 80; i++) {
+        const mid = (lo + hi) / 2;
+        if (fvDiff(mid) > 0) hi = mid;
+        else lo = mid;
+      }
+      return ((lo + hi) / 2) * 100;
+    }
+
+    // =========================================================================
+    // 核心回测引擎：支持分 N 次（1/2/3/4）每月初转入
+    // =========================================================================
+    function simulateStrategy(numBatches) {
+      const initCap = Math.max(0, state.capital);
+      const monthly = Math.max(0, state.monthly);
+      const cybDivFactor = state.includeDiv ? Math.pow(1.008, 1 / 12) : 1.0;
+      const divDivFactor = state.includeDiv ? Math.pow(1.045, 1 / 12) : 1.0;
+
+      const labels = [];
+      const ratios = [];
+      const totalAssets = [];
+      const investedArr = [];
+      const benchDivArr = [];
+      const signalCybPoints = [];
+      const signalDivPoints = [];
+      const tradeLogs = [];
+
+      // 期初 (2010-06)：根据初始比值 0.3665 决定起始持仓（低于中点则起始持有创业板指）
+      const r0 = RAW_DATA[0][1] / RAW_DATA[0][2];
+      let targetDir = r0 <= state.lower ? 'cyb' : (r0 >= state.upper ? 'div' : (r0 < (state.lower + state.upper) / 2 ? 'cyb' : 'div'));
+      let currentCybW = targetDir === 'cyb' ? 1.0 : 0.0;
+      let pendingSteps = 0;       // 剩余待执行的分批次数
+      let completedSteps = 0;     // 当前轮换已执行的批次数
+      let triggerMonth = '';      // 触发本轮切换的信号月末
+      let triggerRatio = 0;
+      let switchRounds = 0;
+
+      let cybVal = initCap * currentCybW;
+      let divVal = initCap * (1 - currentCybW);
+      let benchDivVal = initCap;
+      let totalInvested = initCap;
+
+      // TWR 单位净值追踪（用于计算不受定投现金流干扰的真实最大回撤）
+      let twrNav = 1.0;
+      let twrPeak = 1.0;
+      let maxDrawdown = 0;
+
+      labels.push(RAW_DATA[0][0]);
+      ratios.push(r0);
+      totalAssets.push(cybVal + divVal);
+      investedArr.push(totalInvested);
+      benchDivArr.push(benchDivVal);
+      signalCybPoints.push(null);
+      signalDivPoints.push(null);
+
+      // 逐月推进 t = 1 .. 197
+      // 说明：上月末 (t-1) 收盘确认信号 -> 本月初 (t 月初，按 t-1 收盘价成交) 执行定投与分批转入 -> 本月 (t-1 -> t) 涨跌
+      for (let t = 1; t < RAW_DATA.length; t++) {
+        const [prevMonth, prevCybP, prevDivP] = RAW_DATA[t - 1];
+        const [currMonth, currCybP, currDivP] = RAW_DATA[t];
+        const prevRatio = prevCybP / prevDivP;
+
+        // 1) 检查上月末 (t-1) 收盘比值是否触发新方向的切换信号
+        let sigCyb = null;
+        let sigDiv = null;
+        if (prevRatio < state.lower && targetDir !== 'cyb') {
+          targetDir = 'cyb';
+          pendingSteps = numBatches;
+          completedSteps = 0;
+          triggerMonth = prevMonth;
+          triggerRatio = prevRatio;
+          switchRounds++;
+          sigCyb = prevRatio;
+        } else if (prevRatio > state.upper && targetDir !== 'div') {
+          targetDir = 'div';
+          pendingSteps = numBatches;
+          completedSteps = 0;
+          triggerMonth = prevMonth;
+          triggerRatio = prevRatio;
+          switchRounds++;
+          sigDiv = prevRatio;
+        }
+
+        // 将信号点标注在信号月末 (t-1)
+        if (sigCyb !== null) signalCybPoints[t - 1] = sigCyb;
+        if (sigDiv !== null) signalDivPoints[t - 1] = sigDiv;
+
+        // 2) 本月初（第1交易日）：投入每月定投 1,000 元至目标方向 + 执行本批次调仓
+        totalInvested += monthly;
+        benchDivVal += monthly;
+
+        let feeFactor = 1.0;
+        const totalBeforeCash = cybVal + divVal;
+
+        if (pendingSteps > 0) {
+          completedSteps++;
+          pendingSteps--;
+
+          // 计算本批次完成后的目标创业板仓位
+          const progress = completedSteps / numBatches;
+          const desiredCybW = targetDir === 'cyb' ? progress : (1 - progress);
+
+          // 每月定投直接买入目标方向标的
+          if (targetDir === 'cyb') cybVal += monthly;
+          else divVal += monthly;
+
+          const totalWithCash = cybVal + divVal;
+          const desiredCybVal = totalWithCash * desiredCybW;
+          const switchAmt = Math.abs(desiredCybVal - cybVal);
+          const fee = switchAmt * FEE_RATE;
+
+          if (totalWithCash > 0) {
+            feeFactor = Math.max(0, (totalWithCash - fee) / totalWithCash);
+          }
+
+          const postTotal = Math.max(0, totalWithCash - fee);
+          cybVal = postTotal * desiredCybW;
+          divVal = postTotal * (1 - desiredCybW);
+          currentCybW = desiredCybW;
+
+          tradeLogs.push({
+            signalMonth: triggerMonth,
+            execMonth: currMonth,
+            ratio: triggerRatio,
+            stepLabel: `${completedSteps}/${numBatches}`,
+            direction: targetDir,
+            afterCybW: desiredCybW,
+            switchAmt,
+            assetAtExec: postTotal
+          });
+        } else {
+          // 无待执行调仓：每月 1,000 元直接买入当前目标方向标的
+          if (targetDir === 'cyb') cybVal += monthly;
+          else divVal += monthly;
+        }
+
+        // 3) 本月市场涨跌（t-1 收盘 -> t 收盘）
+        const startMonthTotal = cybVal + divVal;
+        const cybGrowth = (currCybP / prevCybP) * cybDivFactor;
+        const divGrowth = (currDivP / prevDivP) * divDivFactor;
+
+        cybVal *= cybGrowth;
+        divVal *= divGrowth;
+        benchDivVal *= divGrowth;
+
+        const endMonthTotal = cybVal + divVal;
+
+        // 更新 TWR 净值与最大回撤
+        const monthReturn = startMonthTotal > 0 ? (endMonthTotal / startMonthTotal) : 1.0;
+        twrNav = twrNav * feeFactor * monthReturn;
+        if (twrNav > twrPeak) twrPeak = twrNav;
+        const dd = (twrNav - twrPeak) / twrPeak;
+        if (dd < maxDrawdown) maxDrawdown = dd;
+
+        labels.push(currMonth);
+        ratios.push(currCybP / currDivP);
+        totalAssets.push(endMonthTotal);
+        investedArr.push(totalInvested);
+        benchDivArr.push(benchDivVal);
+        signalCybPoints.push(null);
+        signalDivPoints.push(null);
+      }
+
+      const finalAsset = totalAssets[totalAssets.length - 1];
+      const finalBenchDiv = benchDivArr[benchDivArr.length - 1];
+      const months = RAW_DATA.length - 1;
+      const totalReturnPct = totalInvested > 0 ? ((finalAsset - totalInvested) / totalInvested) * 100 : 0;
+      const xirr = calcMonthlyXIRR(initCap, monthly, months, finalAsset);
+
+      return {
+        labels,
+        ratios,
+        totalAssets,
+        investedArr,
+        benchDivArr,
+        signalCybPoints,
+        signalDivPoints,
+        tradeLogs,
+        summary: {
+          totalInvested,
+          finalAsset,
+          netProfit: finalAsset - totalInvested,
+          totalReturnPct,
+          xirr,
+          maxDrawdownPct: maxDrawdown * 100,
+          opsCount: tradeLogs.length,
+          switchRounds,
+          finalBenchDiv
+        }
+      };
+    }
+
+    // =========================================================================
+    // 渲染顶部摘要 & 模块一（下月初操作模拟台 + 3个月分批沙盘 + 点位预警雷达）
+    // =========================================================================
+    function renderModule1() {
+      const cyb = Math.max(1, state.cyb);
+      const div = Math.max(1, state.div);
+      const ratio = cyb / div;
+      const pct = calcPercentile(ratio);
+      const cap = Math.max(0, state.capital);
+      const mon = Math.max(0, state.monthly);
+      const nextTotal = cap + mon;
+
+      // 顶部状态栏更新
+      document.getElementById('topCybVal').textContent = cyb.toFixed(2);
+      document.getElementById('topDivVal').textContent = div.toFixed(2);
+      document.getElementById('topRatioVal').textContent = ratio.toFixed(4);
+      document.getElementById('topPctVal').textContent = `分位 ${pct.toFixed(1)}%`;
+      document.getElementById('topBandVal').textContent = `${state.lower.toFixed(3)} / ${state.upper.toFixed(3)}`;
+      document.getElementById('headerBatchBadge').innerHTML = `
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+        分${state.batches}次每月初转入
+      `;
+
+      // 左侧微型比值温度计
+      document.getElementById('consoleRatioBadge').textContent = `${ratio.toFixed(4)} (历史分位 ${pct.toFixed(1)}%)`;
+      document.getElementById('gaugeLowerLabel').textContent = `下轨 ${state.lower.toFixed(3)}`;
+      document.getElementById('gaugeUpperLabel').textContent = `上轨 ${state.upper.toFixed(3)}`;
+      const toPct = (v) => Math.max(0, Math.min(100, ((v - 0.25) / 0.60) * 100));
+      const w1 = toPct(state.lower);
+      const w2 = Math.max(0, toPct(state.upper) - w1);
+      const w3 = Math.max(0, 100 - w1 - w2);
+      document.getElementById('miniGaugeTrack').innerHTML = `
+        <div class="bg-emerald-500 h-full" style="width:${w1.toFixed(2)}%"></div>
+        <div class="bg-slate-200 h-full" style="width:${w2.toFixed(2)}%"></div>
+        <div class="bg-rose-500 h-full" style="width:${w3.toFixed(2)}%"></div>
+      `;
+      document.getElementById('miniGaugePointer').style.left = toPct(ratio).toFixed(2) + '%';
+
+      // 解析当前持仓状态与下月初指令（始终按 3 次分批规则给出最清晰的操作指导）
+      const isTriggerCyb = ratio < state.lower;
+      const isTriggerDiv = ratio > state.upper;
+
+      let pillText = '';
+      let pillClass = '';
+      let dotClass = '';
+      let primaryHtml = '';
+      let switchTitle = '';
+      let switchAmt = 0;
+      let dcaTargetText = '';
+      let dcaColorClass = 'text-amber-300';
+      let afterCybPct = 0;
+
+      // 沙盘状态：dir ('cyb' | 'div'), activeStep (0=未启动, 1=下月执行第1/3, 2=下月执行第2/3, 3=下月执行第3/3)
+      let sandboxDir = 'cyb';
+      let sandboxActiveStep = 0;
+
+      if (state.holding === 'cash') {
+        if (isTriggerCyb) {
+          pillText = '新资金建仓 · 触发创业板低估';
+          pillClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30';
+          dotClass = 'bg-emerald-400';
+          switchTitle = '全现金建仓创业板';
+          switchAmt = cap;
+          dcaTargetText = '买入创业板 ETF';
+          dcaColorClass = 'text-emerald-300';
+          afterCybPct = 100;
+          sandboxDir = 'cyb';
+          sandboxActiveStep = 1;
+          primaryHtml = `当前比值 <strong class="text-emerald-300">${ratio.toFixed(4)}</strong> 已跌破下轨 ${state.lower.toFixed(3)}。你是全仓现金新开仓，下月初可直接买入 <strong class="text-white">创业板 ETF ${fmtCNY(nextTotal)}</strong>（或分 3 个月初按 33%/67%/100% 逐步建仓以平滑波动）。`;
+        } else if (isTriggerDiv) {
+          pillText = '新资金建仓 · 触发红利防守';
+          pillClass = 'bg-amber-500/20 text-amber-300 border-amber-400/30';
+          dotClass = 'bg-amber-400';
+          switchTitle = '全现金建仓中证红利';
+          switchAmt = cap;
+          dcaTargetText = '买入中证红利 ETF';
+          dcaColorClass = 'text-amber-300';
+          afterCybPct = 0;
+          sandboxDir = 'div';
+          sandboxActiveStep = 1;
+          primaryHtml = `当前比值 <strong class="text-rose-300">${ratio.toFixed(4)}</strong> 高于上轨 ${state.upper.toFixed(3)}。建议下月初将 <strong class="text-white">${fmtCNY(nextTotal)}</strong> 全部建仓 <strong class="text-amber-300">中证红利 ETF</strong> 吃息防守。`;
+        } else {
+          pillText = '新资金建仓 · 跟随当前红利周期';
+          pillClass = 'bg-blue-500/20 text-blue-200 border-blue-400/30';
+          dotClass = 'bg-blue-400';
+          switchTitle = '建仓中证红利底仓';
+          switchAmt = cap;
+          dcaTargetText = '买入中证红利 ETF';
+          dcaColorClass = 'text-amber-300';
+          afterCybPct = 0;
+          sandboxDir = 'cyb';
+          sandboxActiveStep = 0;
+          primaryHtml = `当前比值 <strong class="text-white">${ratio.toFixed(4)}</strong> 位于中性观望区间（${state.lower.toFixed(3)}~${state.upper.toFixed(3)}），；此处为模拟持仓，实际仓位请自行核对。建议先用 <strong class="text-white">${fmtCNY(nextTotal)}</strong> 买入 <strong class="text-amber-300">中证红利 ETF</strong>，待比值跌破 ${state.lower.toFixed(3)} 再启动分3次切入创业板。`;
+        }
+      } else if (state.holding === 'div') {
+        if (isTriggerCyb) {
+          // 触发切入创业板第 1/3
+          const targetCybAmt = nextTotal / 3;
+          switchAmt = Math.max(0, targetCybAmt - mon);
+          pillText = '触发调仓 · 执行切入创业板 1/3';
+          pillClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30';
+          dotClass = 'bg-emerald-400';
+          switchTitle = '卖出红利 → 转入创业板';
+          dcaTargetText = '直接买入创业板 ETF';
+          dcaColorClass = 'text-emerald-300';
+          afterCybPct = 33.3;
+          sandboxDir = 'cyb';
+          sandboxActiveStep = 1;
+          primaryHtml = `比值 <strong class="text-emerald-300">${ratio.toFixed(4)} ≤ 下轨 ${state.lower.toFixed(3)}</strong>，触发「分3次切入创业板」！下月初第1交易日：卖出 <strong class="text-amber-300">中证红利 ETF ${fmtCNY(switchAmt)}</strong>，加上本月新增定投 <strong class="text-white">${fmtCNY(mon)}</strong>，合计买入 <strong class="text-emerald-300">创业板 ETF ${fmtCNY(targetCybAmt)}</strong>（达到 33.3% 目标仓位）。`;
+        } else {
+          pillText = '持有观望 · 继续定投红利';
+          pillClass = 'bg-amber-500/20 text-amber-300 border-amber-400/30';
+          dotClass = 'bg-amber-400';
+          switchTitle = '无需卖出切换';
+          switchAmt = 0;
+          dcaTargetText = '买入中证红利 ETF';
+          dcaColorClass = 'text-amber-300';
+          afterCybPct = 0;
+          sandboxDir = 'cyb';
+          sandboxActiveStep = 0;
+          primaryHtml = `当前比值 <strong class="text-white">${ratio.toFixed(4)}</strong> 未触及下轨 ${state.lower.toFixed(3)}，继续保持 100% 中证红利持仓不动。下月初第1交易日仅需将新增定投 <strong class="text-amber-300">${fmtCNY(mon)}</strong> 直接买入 <strong class="text-amber-300">中证红利 ETF</strong>。`;
+        }
+      } else if (state.holding === 'cyb') {
+        if (isTriggerDiv) {
+          const targetDivAmt = nextTotal / 3;
+          switchAmt = Math.max(0, targetDivAmt - mon);
+          pillText = '触发调仓 · 执行切入红利 1/3';
+          pillClass = 'bg-rose-500/20 text-rose-300 border-rose-400/30';
+          dotClass = 'bg-rose-400';
+          switchTitle = '卖出创业板 → 转入红利';
+          dcaTargetText = '直接买入中证红利 ETF';
+          dcaColorClass = 'text-amber-300';
+          afterCybPct = 66.7;
+          sandboxDir = 'div';
+          sandboxActiveStep = 1;
+          primaryHtml = `比值 <strong class="text-rose-300">${ratio.toFixed(4)} ≥ 上轨 ${state.upper.toFixed(3)}</strong>，触发「分3次切入中证红利」！下月初第1交易日：止盈卖出 <strong class="text-emerald-300">创业板 ETF ${fmtCNY(switchAmt)}</strong>，加上本月新增定投 <strong class="text-white">${fmtCNY(mon)}</strong>，合计买入 <strong class="text-amber-300">中证红利 ETF ${fmtCNY(targetDivAmt)}</strong>（红利达 33.3%）。`;
+        } else {
+          pillText = '持有观望 · 继续定投创业板';
+          pillClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30';
+          dotClass = 'bg-emerald-400';
+          switchTitle = '无需卖出切换';
+          switchAmt = 0;
+          dcaTargetText = '买入创业板 ETF';
+          dcaColorClass = 'text-emerald-300';
+          afterCybPct = 100;
+          sandboxDir = 'div';
+          sandboxActiveStep = 0;
+          primaryHtml = `当前比值 <strong class="text-white">${ratio.toFixed(4)}</strong> 未触及上轨 ${state.upper.toFixed(3)}，继续保持 100% 创业板指持仓不动。下月初第1交易日仅需将新增定投 <strong class="text-emerald-300">${fmtCNY(mon)}</strong> 直接买入 <strong class="text-emerald-300">创业板 ETF</strong>。`;
+        }
+      } else if (state.holding === 'to_cyb_1') {
+        // 已完成 1/3 创业板，下月初执行第 2/3（目标 66.7% 创业板）
+        const curCybAmt = cap / 3;
+        const targetCybAmt = nextTotal * (2 / 3);
+        const totalBuyCyb = Math.max(0, targetCybAmt - curCybAmt);
+        switchAmt = Math.max(0, totalBuyCyb - mon);
+        pillText = '过渡期执行 · 切入创业板 2/3';
+        pillClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30';
+        dotClass = 'bg-emerald-400';
+        switchTitle = '卖出红利 → 转入创业板';
+        dcaTargetText = '直接买入创业板 ETF';
+        dcaColorClass = 'text-emerald-300';
+        afterCybPct = 66.7;
+        sandboxDir = 'cyb';
+        sandboxActiveStep = 2;
+        primaryHtml = `当前正处于「切入创业板」第 2 期过渡阶段。下月初第1交易日：卖出 <strong class="text-amber-300">中证红利 ETF ${fmtCNY(switchAmt)}</strong>，叠加本月定投 <strong class="text-white">${fmtCNY(mon)}</strong>，合计买入 <strong class="text-emerald-300">创业板 ETF ${fmtCNY(totalBuyCyb)}</strong>，使创业板总仓位升至 66.7%。`;
+      } else if (state.holding === 'to_cyb_2') {
+        // 已完成 2/3 创业板，下月初执行第 3/3（目标 100% 创业板）
+        const remainDivAmt = cap / 3;
+        switchAmt = remainDivAmt;
+        pillText = '过渡期收官 · 切入创业板 3/3';
+        pillClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-400/30';
+        dotClass = 'bg-emerald-400';
+        switchTitle = '清仓剩余红利 → 满仓创业板';
+        dcaTargetText = '直接买入创业板 ETF';
+        dcaColorClass = 'text-emerald-300';
+        afterCybPct = 100;
+        sandboxDir = 'cyb';
+        sandboxActiveStep = 3;
+        primaryHtml = `当前正处于「切入创业板」最后 1 期收官阶段。下月初第1交易日：卖出剩余全部 <strong class="text-amber-300">中证红利 ETF ${fmtCNY(remainDivAmt)}</strong>，叠加本月定投 <strong class="text-white">${fmtCNY(mon)}</strong>，合计买入 <strong class="text-emerald-300">创业板 ETF ${fmtCNY(remainDivAmt + mon)}</strong>，完成 100% 切换！`;
+      } else if (state.holding === 'to_div_1') {
+        // 已完成 1/3 红利，下月初执行第 2/3（目标 66.7% 红利 / 33.3% 创业板）
+        const curDivAmt = cap / 3;
+        const targetDivAmt = nextTotal * (2 / 3);
+        const totalBuyDiv = Math.max(0, targetDivAmt - curDivAmt);
+        switchAmt = Math.max(0, totalBuyDiv - mon);
+        pillText = '过渡期执行 · 切入红利 2/3';
+        pillClass = 'bg-rose-500/20 text-rose-300 border-rose-400/30';
+        dotClass = 'bg-rose-400';
+        switchTitle = '卖出创业板 → 转入红利';
+        dcaTargetText = '直接买入中证红利 ETF';
+        dcaColorClass = 'text-amber-300';
+        afterCybPct = 33.3;
+        sandboxDir = 'div';
+        sandboxActiveStep = 2;
+        primaryHtml = `当前正处于「切入中证红利」第 2 期过渡阶段。下月初第1交易日：卖出 <strong class="text-emerald-300">创业板 ETF ${fmtCNY(switchAmt)}</strong>，叠加本月定投 <strong class="text-white">${fmtCNY(mon)}</strong>，合计买入 <strong class="text-amber-300">中证红利 ETF ${fmtCNY(totalBuyDiv)}</strong>，使中证红利仓位升至 66.7%。`;
+      } else if (state.holding === 'to_div_2') {
+        // 已完成 2/3 红利，下月初执行第 3/3（目标 100% 红利）
+        const remainCybAmt = cap / 3;
+        switchAmt = remainCybAmt;
+        pillText = '过渡期收官 · 切入红利 3/3';
+        pillClass = 'bg-rose-500/20 text-rose-300 border-rose-400/30';
+        dotClass = 'bg-rose-400';
+        switchTitle = '清仓剩余创业板 → 满仓红利';
+        dcaTargetText = '直接买入中证红利 ETF';
+        dcaColorClass = 'text-amber-300';
+        afterCybPct = 0;
+        sandboxDir = 'div';
+        sandboxActiveStep = 3;
+        primaryHtml = `当前正处于「切入中证红利」最后 1 期收官阶段。下月初第1交易日：卖出剩余全部 <strong class="text-emerald-300">创业板 ETF ${fmtCNY(remainCybAmt)}</strong>，叠加本月定投 <strong class="text-white">${fmtCNY(mon)}</strong>，合计买入 <strong class="text-amber-300">中证红利 ETF ${fmtCNY(remainCybAmt + mon)}</strong>，完成 100% 切换！`;
+      }
+
+      document.getElementById('signalDot').className = `w-2.5 h-2.5 rounded-full ${dotClass}`;
+      document.getElementById('actionStatusPill').textContent = pillText;
+      document.getElementById('actionStatusPill').className = `px-2.5 py-1 rounded-full text-xs font-bold border ${pillClass}`;
+      document.getElementById('primaryActionBox').innerHTML = primaryHtml;
+      document.getElementById('actSwitchTitle').textContent = switchTitle;
+      document.getElementById('actSwitchAmt').textContent = fmtCNY(switchAmt);
+      document.getElementById('actDcaTarget').textContent = dcaTargetText;
+      document.getElementById('actDcaTarget').className = `text-xs font-semibold mt-1 ${dcaColorClass}`;
+      document.getElementById('actDcaAmt').textContent = '+' + fmtCNY(mon);
+      document.getElementById('actAfterSplit').textContent = `创业板 ${afterCybPct.toFixed(afterCybPct % 1 === 0 ? 0 : 1)}% / 红利 ${(100 - afterCybPct).toFixed((100 - afterCybPct) % 1 === 0 ? 0 : 1)}%`;
+      document.getElementById('actAfterTotal').textContent = fmtCNY(nextTotal);
+
+      // 渲染 3 个月分批转入进度条与金额沙盘
+      renderSandbox(cap, mon, sandboxDir, sandboxActiveStep);
+
+      // 渲染点位预警雷达
+      renderPointRadar(cyb, div);
+    }
+
+    function renderSandbox(cap, mon, dir, activeStep) {
+      const targetName = dir === 'cyb' ? '创业板 ETF' : '中证红利 ETF';
+      const srcName = dir === 'cyb' ? '中证红利' : '创业板';
+      document.getElementById('sandboxSubtitle').textContent =
+        `以当前 ${fmtCNY(cap)} + 每月 ${fmtCNY(mon)} 静态测算，触发后分3个月初平滑完成切换`;
+      document.getElementById('sandboxDirBadge').textContent =
+        activeStep > 0 ? `正在执行：切入${targetName}` : `演练方向：切入${targetName}`;
+      document.getElementById('sandboxDirBadge').className =
+        dir === 'cyb'
+          ? 'text-xs font-semibold px-2.5 py-1 rounded-lg bg-emerald-50 text-emerald-700 border border-emerald-200/70'
+          : 'text-xs font-semibold px-2.5 py-1 rounded-lg bg-amber-50 text-amber-800 border border-amber-200/70';
+
+      // 进度条宽度：已完成批次数 / 3
+      const doneCount = activeStep === 0 ? 0 : activeStep - 1;
+      document.getElementById('sandboxProgressBar').style.width = `${(doneCount / 3) * 100}%`;
+
+      const steps = [1, 2, 3].map(step => {
+        const totalAtStep = cap + mon * step;
+        const targetRatio = step / 3;
+        const targetAmt = totalAtStep * targetRatio;
+        const prevTargetAmt = step === 1 ? 0 : (cap + mon * (step - 1)) * ((step - 1) / 3);
+        const estTransfer = Math.max(0, targetAmt - prevTargetAmt - mon);
+
+        let statusBadge = '<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-100 text-slate-500">待触发</span>';
+        let cardBorder = 'border-slate-200/80 bg-slate-50/40';
+
+        if (activeStep > 0) {
+          if (step < activeStep) {
+            statusBadge = '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-700">已完成</span>';
+            cardBorder = 'border-emerald-200 bg-emerald-50/30';
+          } else if (step === activeStep) {
+            statusBadge = '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-blue-600 text-white">下月初执行</span>';
+            cardBorder = 'border-blue-500 bg-blue-50/50 ring-2 ring-blue-100';
+          } else {
+            statusBadge = '<span class="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-slate-200/80 text-slate-600">后续排期</span>';
+          }
+        }
+
+        return `
+          <div class="rounded-xl border p-3.5 transition ${cardBorder}">
+            <div class="flex items-center justify-between gap-1">
+              <span class="text-xs font-bold text-slate-900">第 ${step} 月初 (${(targetRatio * 100).toFixed(step === 3 ? 0 : 1)}%)</span>
+              ${statusBadge}
+            </div>
+            <div class="mt-2 space-y-1 text-xs">
+              <div class="flex justify-between text-slate-500">
+                <span>目标持有${dir === 'cyb' ? '创业板' : '红利'}</span>
+                <strong class="text-slate-900 tabular-nums">${fmtCNY(targetAmt)}</strong>
+              </div>
+              <div class="flex justify-between text-slate-500">
+                <span>卖出${srcName}转入</span>
+                <strong class="text-blue-700 tabular-nums">≈${fmtCNY(estTransfer)}</strong>
+              </div>
+              <div class="flex justify-between text-slate-500">
+                <span>月度定投直买</span>
+                <strong class="text-emerald-700 tabular-nums">+${fmtCNY(mon)}</strong>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('sandboxStepsGrid').innerHTML = steps;
+    }
+
+    function renderPointRadar(cyb, div) {
+      const lowerCyb = state.lower * div;
+      const upperCyb = state.upper * div;
+      const lowerDiv = cyb / state.lower;
+      const upperDiv = cyb / state.upper;
+      const lowerDist = ((lowerCyb - cyb) / cyb) * 100;
+      const upperDist = ((upperCyb - cyb) / cyb) * 100;
+
+      document.getElementById('radarDivRef').textContent = div.toFixed(2);
+      document.getElementById('radarLowerRatio').textContent = state.lower.toFixed(3);
+      document.getElementById('radarUpperRatio').textContent = state.upper.toFixed(3);
+      document.getElementById('radarLowerCyb').textContent = lowerCyb.toFixed(2);
+      document.getElementById('radarUpperCyb').textContent = upperCyb.toFixed(2);
+      document.getElementById('radarLowerDiv').textContent = lowerDiv.toFixed(2);
+      document.getElementById('radarUpperDiv').textContent = upperDiv.toFixed(2);
+
+      const ldEl = document.getElementById('radarLowerDist');
+      ldEl.textContent = lowerDist >= 0 ? '已触发' : fmtPct(lowerDist, 1, true);
+      ldEl.className = lowerDist >= 0
+        ? 'text-right shrink-0 px-2.5 py-1 rounded-lg bg-emerald-600 text-white text-xs font-bold'
+        : 'text-right shrink-0 px-2.5 py-1 rounded-lg bg-emerald-100 text-emerald-800 text-xs font-bold tabular-nums';
+
+      const udEl = document.getElementById('radarUpperDist');
+      udEl.textContent = upperDist <= 0 ? '已触发' : fmtPct(upperDist, 1, true);
+      udEl.className = upperDist <= 0
+        ? 'text-right shrink-0 px-2.5 py-1 rounded-lg bg-rose-600 text-white text-xs font-bold'
+        : 'text-right shrink-0 px-2.5 py-1 rounded-lg bg-rose-100 text-rose-800 text-xs font-bold tabular-nums';
+    }
+
+    // =========================================================================
+    // 渲染模块二（KPI + 双图表）与模块三（历史分批调仓明细表）
+    // =========================================================================
+    function renderModule2And3() {
+      const btSplit = simulateStrategy(state.batches);
+      const btLump = simulateStrategy(1);
+      const s = btSplit.summary;
+      const sLump = btLump.summary;
+
+      // 更新副标题
+      document.getElementById('btCapLabel').textContent = fmtCNY(state.capital);
+      document.getElementById('btMonLabel').textContent = fmtCNY(state.monthly);
+
+      // KPI 1
+      document.getElementById('kpiInvested').textContent = fmtCNY(s.totalInvested);
+      document.getElementById('kpiInvestedSub').textContent = `初始 ${fmtCNY(state.capital)} + 197期 × ${fmtCNY(state.monthly)}`;
+
+      // KPI 2
+      document.getElementById('kpiAssetTitle').textContent =
+        state.batches === 1 ? '一次性全仓期末总资产' : `分${state.batches}次调仓期末总资产`;
+      document.getElementById('kpiFinalAsset').textContent = fmtCNY(s.finalAsset);
+      document.getElementById('kpiReturnBadge').textContent = fmtPct(s.totalReturnPct, 1, true);
+      document.getElementById('kpiNetProfit').textContent = fmtCNY(s.netProfit);
+      const vsDiv = s.finalAsset - s.finalBenchDiv;
+      document.getElementById('kpiVsDivText').textContent =
+        vsDiv >= 0 ? `跑赢纯红利 +${fmtCNY(vsDiv)}` : `落后纯红利 ${fmtCNY(vsDiv)}`;
+
+      // KPI 3
+      document.getElementById('kpiXirr').textContent = fmtPct(s.xirr, 2);
+      const xirrDiff = s.xirr - sLump.xirr;
+      document.getElementById('kpiXirrCompare').textContent =
+        state.batches === 1
+          ? `当前为一次性全仓基准（${fmtPct(sLump.xirr, 2)}）`
+          : `一次性全仓为 ${fmtPct(sLump.xirr, 2)}（差值 ${fmtPct(xirrDiff, 2, true)}）`;
+
+      // KPI 4
+      document.getElementById('kpiMaxDd').textContent = fmtPct(s.maxDrawdownPct, 2);
+      document.getElementById('kpiOpsCount').textContent =
+        `累计分批操作 ${s.opsCount} 次（共 ${s.switchRounds} 轮大周期切换）`;
+
+      // 渲染双图表
+      renderAssetChart(btSplit, btLump);
+      renderRatioChart(btSplit);
+
+      // 渲染历史分批调仓明细表
+      renderTradeTable(btSplit.tradeLogs);
+    }
+
+    function renderAssetChart(btSplit, btLump) {
+      const ctx = document.getElementById('assetChart').getContext('2d');
+      if (assetChart) assetChart.destroy();
+
+      const datasets = [
+        {
+          label: state.batches === 1 ? '一次性全仓调仓' : `分${state.batches}次每月初调仓`,
+          data: btSplit.totalAssets,
+          borderColor: '#1d4ed8',
+          backgroundColor: 'rgba(29, 78, 216, 0.08)',
+          borderWidth: 2.6,
+          fill: true,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          tension: 0.14
+        }
+      ];
+
+      if (state.batches !== 1) {
+        datasets.push({
+          label: '一次性全仓调仓（对比）',
+          data: btLump.totalAssets,
+          borderColor: '#0d9488',
+          borderWidth: 1.8,
+          borderDash: [4, 3],
+          fill: false,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          tension: 0.14
+        });
+      }
+
+      datasets.push(
+        {
+          label: '纯定投中证红利',
+          data: btSplit.benchDivArr,
+          borderColor: '#d97706',
+          borderWidth: 1.8,
+          fill: false,
+          pointRadius: 0,
+          pointHoverRadius: 4,
+          tension: 0.14
+        },
+        {
+          label: '累计投入本金',
+          data: btSplit.investedArr,
+          borderColor: '#94a3b8',
+          borderWidth: 1.5,
+          borderDash: [5, 5],
+          fill: false,
+          pointRadius: 0,
+          pointHoverRadius: 3,
+          tension: 0
+        }
+      );
+
+      assetChart = new Chart(ctx, {
+        type: 'line',
+        data: { labels: btSplit.labels, datasets },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: {
+              position: 'top',
+              align: 'start',
+              labels: { usePointStyle: true, boxWidth: 8, font: { size: 12 } }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(15, 23, 42, 0.95)',
+              padding: 12,
+              callbacks: {
+                label: (c) => `${c.dataset.label}: ${fmtCNY(c.parsed.y)}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { maxTicksLimit: 9, font: { size: 11 }, color: '#64748b' }
+            },
+            y: {
+              type: state.yScale,
+              grid: { color: '#f1f5f9' },
+              ticks: {
+                font: { size: 11 },
+                color: '#64748b',
+                callback: (v) => v >= 10000 ? (v / 10000).toFixed(v >= 100000 ? 0 : 1) + '万' : '¥' + v
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderRatioChart(bt) {
+      const ctx = document.getElementById('ratioChart').getContext('2d');
+      if (ratioChart) ratioChart.destroy();
+
+      const len = bt.labels.length;
+      ratioChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: bt.labels,
+          datasets: [
+            {
+              label: '创业板指 / 中证红利 比值',
+              data: bt.ratios,
+              borderColor: '#0f172a',
+              backgroundColor: 'rgba(15, 23, 42, 0.05)',
+              borderWidth: 2,
+              fill: true,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              tension: 0.12
+            },
+            {
+              label: '触发切入创业板',
+              data: bt.signalCybPoints,
+              borderColor: '#ffffff',
+              backgroundColor: '#10b981',
+              borderWidth: 2,
+              pointRadius: 6,
+              pointHoverRadius: 8,
+              showLine: false
+            },
+            {
+              label: '触发切入中证红利',
+              data: bt.signalDivPoints,
+              borderColor: '#ffffff',
+              backgroundColor: '#e11d48',
+              borderWidth: 2,
+              pointRadius: 6,
+              pointHoverRadius: 8,
+              showLine: false
+            },
+            {
+              label: `下轨 ${state.lower.toFixed(3)}`,
+              data: Array(len).fill(state.lower),
+              borderColor: 'rgba(16, 185, 129, 0.85)',
+              borderWidth: 1.5,
+              borderDash: [5, 4],
+              pointRadius: 0,
+              fill: false
+            },
+            {
+              label: `上轨 ${state.upper.toFixed(3)}`,
+              data: Array(len).fill(state.upper),
+              borderColor: 'rgba(225, 29, 72, 0.85)',
+              borderWidth: 1.5,
+              borderDash: [5, 4],
+              pointRadius: 0,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(15, 23, 42, 0.95)',
+              padding: 10,
+              filter: (item) => item.datasetIndex <= 2 && item.parsed.y !== null,
+              callbacks: {
+                label: (c) => `${c.dataset.label}: ${c.parsed.y.toFixed(4)}`
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { display: false },
+              ticks: { maxTicksLimit: 9, font: { size: 11 }, color: '#64748b' }
+            },
+            y: {
+              min: 0.25,
+              max: 0.90,
+              grid: { color: '#f1f5f9' },
+              ticks: {
+                font: { size: 11 },
+                color: '#64748b',
+                callback: (v) => v.toFixed(2)
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderTradeTable(logs) {
+      const filtered = logs.filter(l => state.logFilter === 'all' || l.direction === state.logFilter);
+      document.getElementById('logCountBadge').textContent = `共 ${filtered.length} 笔`;
+
+      const tbody = document.getElementById('tradeLogBody');
+      const footerBar = document.getElementById('logFooterBar');
+      const toggleBtn = document.getElementById('btnToggleLogExpand');
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="8" class="py-10 text-center text-slate-400 text-xs">
+              当前参数与筛选条件下无调仓记录。
+            </td>
+          </tr>
+        `;
+        footerBar.classList.add('hidden');
+        return;
+      }
+
+      const limit = 9;
+      const showRows = state.logExpanded ? filtered : filtered.slice(0, limit);
+
+      tbody.innerHTML = showRows.map(log => {
+        const isCyb = log.direction === 'cyb';
+        const dirBadge = isCyb
+          ? '<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-xs font-semibold">转入创业板指</span>'
+          : '<span class="inline-flex items-center px-2 py-0.5 rounded-md bg-rose-50 text-rose-700 border border-rose-200/80 text-xs font-semibold">转入中证红利</span>';
+        const stepBadge = `<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-xs font-bold tabular-nums">${log.stepLabel}</span>`;
+
+        return `
+          <tr class="hover:bg-slate-50/80 transition">
+            <td class="py-3 px-4 font-semibold text-slate-700 tabular-nums whitespace-nowrap">${log.signalMonth}</td>
+            <td class="py-3 px-3 font-medium text-slate-500 tabular-nums whitespace-nowrap">${log.execMonth} 初</td>
+            <td class="py-3 px-3 text-right font-bold tabular-nums ${isCyb ? 'text-emerald-700' : 'text-rose-700'}">${log.ratio.toFixed(4)}</td>
+            <td class="py-3 px-3 text-center">${stepBadge}</td>
+            <td class="py-3 px-3 whitespace-nowrap">${dirBadge}</td>
+            <td class="py-3 px-3 text-right font-bold text-slate-800 tabular-nums">${(log.afterCybW * 100).toFixed(1)}%</td>
+            <td class="py-3 px-3 text-right font-semibold text-blue-700 tabular-nums whitespace-nowrap">${fmtCNY(log.switchAmt)}</td>
+            <td class="py-3 px-4 text-right font-bold text-slate-900 tabular-nums whitespace-nowrap">${fmtCNY(log.assetAtExec)}</td>
+          </tr>
+        `;
+      }).join('');
+
+      if (filtered.length > limit) {
+        footerBar.classList.remove('hidden');
+        toggleBtn.textContent = state.logExpanded
+          ? '收起部分记录 ▲'
+          : `展开全部 ${filtered.length} 笔调仓记录 ▼`;
+      } else {
+        footerBar.classList.add('hidden');
+      }
+    }
+
+    // =========================================================================
+    // 控件样式同步与主刷新入口
+    // =========================================================================
+    function syncUIControls() {
+      // 预设按钮高亮
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        const [lo, hi] = btn.dataset.preset.split(',').map(Number);
+        const active = Math.abs(state.lower - lo) < 0.001 && Math.abs(state.upper - hi) < 0.001;
+        btn.className = active
+          ? 'preset-btn px-3 py-1.5 rounded-lg text-xs font-bold border border-blue-600 bg-blue-600 text-white shadow-sm transition cursor-pointer'
+          : 'preset-btn px-3 py-1.5 rounded-lg text-xs font-semibold border border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:text-blue-700 transition cursor-pointer';
+      });
+
+      // 分批按钮高亮
+      document.querySelectorAll('.batch-btn').forEach(btn => {
+        const b = Number(btn.dataset.batches);
+        const active = state.batches === b;
+        btn.className = active
+          ? 'batch-btn px-2.5 py-1 rounded-md font-bold bg-white text-blue-700 shadow-sm transition cursor-pointer'
+          : 'batch-btn px-2.5 py-1 rounded-md font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer';
+      });
+
+      // 滑块数值显示
+      document.getElementById('sliderLower').value = state.lower.toFixed(3);
+      document.getElementById('sliderUpper').value = state.upper.toFixed(3);
+      document.getElementById('labelLower').textContent = state.lower.toFixed(3);
+      document.getElementById('labelUpper').textContent = state.upper.toFixed(3);
+
+      // 坐标轴按钮
+      const actScale = 'px-2.5 py-1 rounded-md font-bold bg-white text-blue-700 shadow-sm transition cursor-pointer';
+      const inactScale = 'px-2.5 py-1 rounded-md font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer';
+      document.getElementById('scaleLinearBtn').className = state.yScale === 'linear' ? actScale : inactScale;
+      document.getElementById('scaleLogBtn').className = state.yScale === 'logarithmic' ? actScale : inactScale;
+
+      // 流水筛选按钮
+      document.querySelectorAll('.log-filter-btn').forEach(btn => {
+        const active = btn.dataset.filter === state.logFilter;
+        btn.className = active
+          ? 'log-filter-btn px-2.5 py-1.5 rounded-md font-bold bg-white text-blue-700 shadow-sm transition cursor-pointer'
+          : 'log-filter-btn px-2.5 py-1.5 rounded-md font-semibold text-slate-600 hover:text-slate-900 transition cursor-pointer';
+      });
+    }
+
+    function updateAll() {
+      try {
+        syncUIControls();
+        renderModule1();
+        renderModule2And3();
+      } catch (err) {
+        console.error('看板渲染异常:', err);
+      }
+    }
+
+    // =========================================================================
+    // 事件绑定
+    // =========================================================================
+    function bindEvents() {
+      // 顶部输入区
+      document.getElementById('inputCapital').addEventListener('input', (e) => {
+        const v = parseFloat(e.target.value);
+        if (!isNaN(v) && v >= 0) { state.capital = v; updateAll(); }
+      });
+      document.getElementById('inputMonthly').addEventListener('input', (e) => {
+        const v = parseFloat(e.target.value);
+        if (!isNaN(v) && v >= 0) { state.monthly = v; updateAll(); }
+      });
+      document.getElementById('inputCyb').addEventListener('input', (e) => {
+        const v = parseFloat(e.target.value);
+        if (!isNaN(v) && v > 0) { state.cyb = v; updateAll(); }
+      });
+      document.getElementById('inputDiv').addEventListener('input', (e) => {
+        const v = parseFloat(e.target.value);
+        if (!isNaN(v) && v > 0) { state.div = v; updateAll(); }
+      });
+      document.getElementById('selectHolding').addEventListener('change', (e) => {
+        state.holding = e.target.value;
+        updateAll();
+      });
+
+      // 快捷演练按钮
+      document.getElementById('simBtnCurrent').addEventListener('click', () => {
+        state.cyb = 2212.13;
+        state.div = 5529.78;
+        document.getElementById('inputCyb').value = state.cyb;
+        document.getElementById('inputDiv').value = state.div;
+        updateAll();
+      });
+      document.getElementById('simBtnLow').addEventListener('click', () => {
+        state.cyb = Number((state.div * (state.lower - 0.005)).toFixed(2));
+        document.getElementById('inputCyb').value = state.cyb;
+        updateAll();
+      });
+      document.getElementById('simBtnHigh').addEventListener('click', () => {
+        state.cyb = Number((state.div * (state.upper + 0.005)).toFixed(2));
+        document.getElementById('inputCyb').value = state.cyb;
+        updateAll();
+      });
+
+      // 预设区间按钮
+      document.querySelectorAll('.preset-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const [lo, hi] = btn.dataset.preset.split(',').map(Number);
+          state.lower = lo;
+          state.upper = hi;
+          updateAll();
+        });
+      });
+
+      // 分批次数按钮
+      document.querySelectorAll('.batch-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.batches = Number(btn.dataset.batches);
+          updateAll();
+        });
+      });
+
+      // 含息估算开关
+      document.getElementById('toggleDividend').addEventListener('change', (e) => {
+        state.includeDiv = e.target.checked;
+        updateAll();
+      });
+
+      // 上下轨滑块
+      document.getElementById('sliderLower').addEventListener('input', (e) => {
+        const v = parseFloat(e.target.value);
+        state.lower = Math.min(v, state.upper - 0.04);
+        updateAll();
+      });
+      document.getElementById('sliderUpper').addEventListener('input', (e) => {
+        const v = parseFloat(e.target.value);
+        state.upper = Math.max(v, state.lower + 0.04);
+        updateAll();
+      });
+
+      // 坐标轴切换
+      document.getElementById('scaleLinearBtn').addEventListener('click', () => {
+        state.yScale = 'linear';
+        updateAll();
+      });
+      document.getElementById('scaleLogBtn').addEventListener('click', () => {
+        state.yScale = 'logarithmic';
+        updateAll();
+      });
+
+      // 流水筛选与展开折叠
+      document.querySelectorAll('.log-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          state.logFilter = btn.dataset.filter;
+          state.logExpanded = false;
+          updateAll();
+        });
+      });
+      document.getElementById('btnToggleLogExpand').addEventListener('click', () => {
+        state.logExpanded = !state.logExpanded;
+        updateAll();
+      });
+
+      // SOP Checklist 交互
+      function updateSopProgress() {
+        const boxes = document.querySelectorAll('.sop-checkbox');
+        let done = 0;
+        boxes.forEach(cb => {
+          const card = cb.closest('.sop-item');
+          const title = card.querySelector('.sop-title');
+          if (cb.checked) {
+            done++;
+            card.classList.add('bg-emerald-50/50', 'border-emerald-300');
+            card.classList.remove('bg-slate-50/40', 'border-slate-200/80');
+            title.classList.add('line-through', 'text-emerald-800');
+            title.classList.remove('text-slate-900');
+          } else {
+            card.classList.remove('bg-emerald-50/50', 'border-emerald-300');
+            card.classList.add('bg-slate-50/40', 'border-slate-200/80');
+            title.classList.remove('line-through', 'text-emerald-800');
+            title.classList.add('text-slate-900');
+          }
+        });
+        const badge = document.getElementById('sopProgressBadge');
+        badge.textContent = `已完成 ${done} / ${boxes.length}`;
+        badge.className = done === boxes.length
+          ? 'text-xs font-bold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-700 tabular-nums'
+          : 'text-xs font-bold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700 tabular-nums';
+      }
+
+      document.querySelectorAll('.sop-checkbox').forEach(cb => {
+        cb.addEventListener('change', updateSopProgress);
+      });
+      document.getElementById('btnResetSop').addEventListener('click', () => {
+        document.querySelectorAll('.sop-checkbox').forEach(cb => { cb.checked = false; });
+        updateSopProgress();
+      });
+
+      // 恢复默认按钮
+      document.getElementById('btnResetDefaults').addEventListener('click', () => {
+        state.capital = 50000;
+        state.monthly = 1000;
+        state.cyb = 2212.13;
+        state.div = 5529.78;
+        state.holding = 'div';
+        state.lower = 0.375;
+        state.upper = 0.625;
+        state.batches = 3;
+        state.includeDiv = false;
+        state.yScale = 'linear';
+        state.logFilter = 'all';
+        state.logExpanded = false;
+
+        document.getElementById('inputCapital').value = state.capital;
+        document.getElementById('inputMonthly').value = state.monthly;
+        document.getElementById('inputCyb').value = state.cyb;
+        document.getElementById('inputDiv').value = state.div;
+        document.getElementById('selectHolding').value = state.holding;
+        document.getElementById('toggleDividend').checked = false;
+        updateAll();
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      bindEvents();
+      updateAll();
+    });
+  </script>
+<script src="./live-market-adapter.js"></script>
+</body>
+</html>
