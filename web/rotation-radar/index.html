@@ -292,9 +292,11 @@
                 <option value="div" selected>全仓中证红利（默认）</option>
                 <option value="to_growth_1">切创业板 1/3（已完成第1批）</option>
                 <option value="to_growth_2">切创业板 2/3（已完成第2批）</option>
+                <option value="to_growth_3">切入成长第3/4批（仅4次方案）</option>
                 <option value="growth">全仓创业板</option>
                 <option value="to_div_1">切红利 1/3（已完成第1批）</option>
                 <option value="to_div_2">切红利 2/3（已完成第2批）</option>
+                <option value="to_div_3">切回红利第3/4批（仅4次方案）</option>
               </select>
             </div>
 
@@ -378,9 +380,11 @@
                 <option value="div" selected>全仓中证红利（默认）</option>
                 <option value="to_growth_1">切恒生科技 1/3（已完成第1批）</option>
                 <option value="to_growth_2">切恒生科技 2/3（已完成第2批）</option>
+                <option value="to_growth_3">切入成长第3/4批（仅4次方案）</option>
                 <option value="growth">全仓恒生科技</option>
                 <option value="to_div_1">切红利 1/3（已完成第1批）</option>
                 <option value="to_div_2">切红利 2/3（已完成第2批）</option>
+                <option value="to_div_3">切回红利第3/4批（仅4次方案）</option>
               </select>
             </div>
 
@@ -949,85 +953,27 @@
      * 解析单个子账户从当前持仓状态在下一月初（及连续推演）的目标成长仓位
      */
     function stepSubAccount(holdState, ratio, lower, upper, batches) {
-      const stepSize = 1 / batches;
-      let nextGrowthW = 0;
-      let nextState = holdState;
-      let actionType = 'hold_div'; // hold_div | hold_growth | to_growth | to_div
-      let stepIndex = 0;
-
-      if (holdState === 'div') {
-        if (ratio <= lower) {
-          stepIndex = 1;
-          nextGrowthW = Math.min(1, stepSize);
-          nextState = nextGrowthW >= 0.999 ? 'growth' : 'to_growth_1';
-          actionType = 'to_growth';
-        } else {
-          nextGrowthW = 0;
-          nextState = 'div';
-          actionType = 'hold_div';
-        }
-      } else if (holdState === 'to_growth_1') {
-        if (ratio >= upper) {
-          stepIndex = 1;
-          nextGrowthW = Math.max(0, 1 - stepSize);
-          nextState = nextGrowthW <= 0.001 ? 'div' : 'to_div_1';
-          actionType = 'to_div';
-        } else {
-          stepIndex = Math.min(2, batches);
-          nextGrowthW = Math.min(1, 2 * stepSize);
-          nextState = nextGrowthW >= 0.999 ? 'growth' : 'to_growth_2';
-          actionType = 'to_growth';
-        }
-      } else if (holdState === 'to_growth_2') {
-        if (ratio >= upper) {
-          stepIndex = 1;
-          nextGrowthW = Math.max(0, 1 - stepSize);
-          nextState = nextGrowthW <= 0.001 ? 'div' : 'to_div_1';
-          actionType = 'to_div';
-        } else {
-          stepIndex = Math.min(3, batches);
-          nextGrowthW = Math.min(1, 3 * stepSize);
-          nextState = nextGrowthW >= 0.999 ? 'growth' : 'to_growth_2';
-          actionType = 'to_growth';
-        }
-      } else if (holdState === 'growth') {
-        if (ratio >= upper) {
-          stepIndex = 1;
-          nextGrowthW = Math.max(0, 1 - stepSize);
-          nextState = nextGrowthW <= 0.001 ? 'div' : 'to_div_1';
-          actionType = 'to_div';
-        } else {
-          nextGrowthW = 1;
-          nextState = 'growth';
-          actionType = 'hold_growth';
-        }
-      } else if (holdState === 'to_div_1') {
-        if (ratio <= lower) {
-          stepIndex = 1;
-          nextGrowthW = Math.min(1, stepSize);
-          nextState = nextGrowthW >= 0.999 ? 'growth' : 'to_growth_1';
-          actionType = 'to_growth';
-        } else {
-          stepIndex = Math.min(2, batches);
-          nextGrowthW = Math.max(0, 1 - 2 * stepSize);
-          nextState = nextGrowthW <= 0.001 ? 'div' : 'to_div_2';
-          actionType = 'to_div';
-        }
-      } else if (holdState === 'to_div_2') {
-        if (ratio <= lower) {
-          stepIndex = 1;
-          nextGrowthW = Math.min(1, stepSize);
-          nextState = nextGrowthW >= 0.999 ? 'growth' : 'to_growth_1';
-          actionType = 'to_growth';
-        } else {
-          stepIndex = Math.min(3, batches);
-          nextGrowthW = Math.max(0, 1 - 3 * stepSize);
-          nextState = nextGrowthW <= 0.001 ? 'div' : 'to_div_2';
-          actionType = 'to_div';
-        }
-      }
-
-      return { nextGrowthW, nextState, actionType, stepIndex };
+      // 将过渡期表达为真实目标仓位，支持1-4批，并在信号反向时只调整一批。
+      const step=1/batches;
+      const partial=/^to_(growth|div)_(\d+)$/.exec(holdState);
+      let current=holdState==='growth'?1:holdState==='div'?0:
+        partial?(partial[1]==='growth'?Math.min(1,Number(partial[2])*step):Math.max(0,1-Number(partial[2])*step)):0;
+      let direction=ratio<=lower?'growth':ratio>=upper?'div':
+        partial?partial[1]:(holdState==='growth'?'growth':'div');
+      const before=current;
+      if(direction==='growth')current=Math.min(1,current+step);
+      else current=Math.max(0,current-step);
+      // 中性区且未开始过渡时，绝不创建换仓。
+      if(!partial&&ratio>lower&&ratio<upper)current=before;
+      current=Math.max(0,Math.min(1,Math.round(current*1000000)/1000000));
+      const actionType=current>before+1e-6?'to_growth':
+        current<before-1e-6?'to_div':current>=1-1e-6?'hold_growth':'hold_div';
+      const stepIndex=actionType==='to_growth'?Math.round(current*batches):
+        actionType==='to_div'?Math.round((1-current)*batches):0;
+      const nextState=current>=1-1e-6?'growth':current<=1e-6?'div':
+        actionType==='to_growth'?'to_growth_'+stepIndex:
+        actionType==='to_div'?'to_div_'+stepIndex:holdState;
+      return {nextGrowthW:current,nextState,actionType,stepIndex};
     }
 
     // =========================================================================
