@@ -5,7 +5,7 @@ const API='https://api.github.com/repos/Xushengxr/Webpage-for-Practicing-Civil-S
 const STRATEGY='cyb-dividend-fixed-v21-0375-0625',OFFLINE=RAW_DATA.map(x=>x.slice());
 const $=id=>document.getElementById(id),ym=s=>String(s).slice(0,7),p2=v=>Number(v).toFixed(2);
 let original=null,hk=null,syncLatest=null,loading=false;
-const nowMonth=()=>{const parts=Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit'}).format(new Date());return parts.slice(0,7);}
+const nowMonth=()=>{const pts=Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Shanghai',year:'numeric',month:'2-digit'}).formatToParts(new Date());const v=Object.fromEntries(pts.map(p=>[p.type,p.value]));return v.year+'-'+v.month;};
 function old(date){const t=Date.parse(date+'T16:00:00+08:00'),days=(Date.now()-t)/86400000;return !Number.isFinite(days)||days>7||days< -1;}
 function validA(x){return !!(x&&x.demo===false&&x.strategy?.id===STRATEGY&&x.latest?.date&&+x.latest.growth>0&&+x.latest.dividend>0&&Array.isArray(x.history)&&x.history.length>=20)}
 function validHK(x){return !!(x&&x.series==='HSTECH'&&x.latest?.date&&+x.latest.close>0&&Array.isArray(x.monthly)&&x.monthly.length>=50)}
