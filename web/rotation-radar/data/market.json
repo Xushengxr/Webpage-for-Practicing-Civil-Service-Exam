@@ -15,10 +15,10 @@
     ]
   },
   "latest": {
-    "date": "2026-11-20",
-    "growth": 2212.13,
-    "dividend": 5529.78,
-    "ratio": 0.400039
+    "date": "2026-11-23",
+    "growth": 2280.204,
+    "dividend": 5492.17,
+    "ratio": 0.415174
   },
   "current_state": {
     "direction": "dividend",
@@ -28,7 +28,7 @@
   "forecast": {
     "is_confirmed": false,
     "signal_month": "2026-11",
-    "ratio": 0.400039,
+    "ratio": 0.415174,
     "expected_execution": "2026-12-01",
     "kind": "hold",
     "side": "dividend",
@@ -62,7 +62,7 @@
       "month": "2015-05",
       "month_end_date": "2015-05-29",
       "execution_date": "2015-06-01",
-      "ratio": 0.659835,
+      "ratio": 0.659836,
       "kind": "rotate",
       "side": "dividend",
       "new_tiers": 1,
@@ -106,7 +106,7 @@
       "month": "2019-01",
       "month_end_date": "2019-01-31",
       "execution_date": "2019-02-01",
-      "ratio": 0.306074,
+      "ratio": 0.306073,
       "kind": "rotate",
       "side": "growth",
       "new_tiers": 1,
@@ -128,7 +128,7 @@
       "month": "2020-12",
       "month_end_date": "2020-12-31",
       "execution_date": "2021-01-04",
-      "ratio": 0.645458,
+      "ratio": 0.645457,
       "kind": "rotate",
       "side": "dividend",
       "new_tiers": 1,
@@ -139,7 +139,7 @@
       "month": "2021-01",
       "month_end_date": "2021-01-29",
       "execution_date": "2021-02-01",
-      "ratio": 0.706031,
+      "ratio": 0.706032,
       "kind": "rotate",
       "side": "dividend",
       "new_tiers": 1,
@@ -172,7 +172,7 @@
       "month": "2021-10",
       "month_end_date": "2021-10-29",
       "execution_date": "2021-11-01",
-      "ratio": 0.674903,
+      "ratio": 0.674902,
       "kind": "rotate",
       "side": "dividend",
       "new_tiers": 1,
@@ -183,7 +183,7 @@
       "month": "2021-11",
       "month_end_date": "2021-11-30",
       "execution_date": "2021-12-01",
-      "ratio": 0.693003,
+      "ratio": 0.693004,
       "kind": "rotate",
       "side": "dividend",
       "new_tiers": 1,
@@ -216,7 +216,7 @@
       "month": "2026-04",
       "month_end_date": "2026-04-30",
       "execution_date": "2026-05-06",
-      "ratio": 0.626958,
+      "ratio": 0.626957,
       "kind": "rotate",
       "side": "dividend",
       "new_tiers": 1,
@@ -251,7 +251,7 @@
       "month": "2025-03",
       "month_end_date": "2025-03-31",
       "execution_date": "2025-04-01",
-      "ratio": 0.388999
+      "ratio": 0.388998
     },
     {
       "month": "2025-04",
@@ -269,19 +269,19 @@
       "month": "2025-06",
       "month_end_date": "2025-06-30",
       "execution_date": "2025-07-01",
-      "ratio": 0.397949
+      "ratio": 0.39795
     },
     {
       "month": "2025-07",
       "month_end_date": "2025-07-31",
       "execution_date": "2025-08-01",
-      "ratio": 0.424509
+      "ratio": 0.42451
     },
     {
       "month": "2025-08",
       "month_end_date": "2025-08-29",
       "execution_date": "2025-09-01",
-      "ratio": 0.521869
+      "ratio": 0.521868
     },
     {
       "month": "2025-09",
@@ -293,43 +293,43 @@
       "month": "2025-10",
       "month_end_date": "2025-10-31",
       "execution_date": "2025-11-03",
-      "ratio": 0.566403
+      "ratio": 0.566404
     },
     {
       "month": "2025-11",
       "month_end_date": "2025-11-28",
       "execution_date": "2025-12-01",
-      "ratio": 0.550429
+      "ratio": 0.550428
     },
     {
       "month": "2025-12",
       "month_end_date": "2025-12-31",
       "execution_date": "2026-01-05",
-      "ratio": 0.581973
+      "ratio": 0.581974
     },
     {
       "month": "2026-01",
       "month_end_date": "2026-01-30",
       "execution_date": "2026-02-02",
-      "ratio": 0.58708
+      "ratio": 0.587079
     },
     {
       "month": "2026-02",
       "month_end_date": "2026-02-27",
       "execution_date": "2026-03-02",
-      "ratio": 0.568125
+      "ratio": 0.568126
     },
     {
       "month": "2026-03",
       "month_end_date": "2026-03-31",
       "execution_date": "2026-04-01",
-      "ratio": 0.556046
+      "ratio": 0.556047
     },
     {
       "month": "2026-04",
       "month_end_date": "2026-04-30",
       "execution_date": "2026-05-06",
-      "ratio": 0.626958
+      "ratio": 0.626957
     },
     {
       "month": "2026-05",
@@ -347,7 +347,7 @@
       "month": "2026-07",
       "month_end_date": "2026-07-31",
       "execution_date": "2026-08-03",
-      "ratio": 0.600415
+      "ratio": 0.600416
     },
     {
       "month": "2026-08",
@@ -359,7 +359,7 @@
       "month": "2026-09",
       "month_end_date": "2026-09-30",
       "execution_date": "2026-10-08",
-      "ratio": 0.570742
+      "ratio": 0.570741
     },
     {
       "month": "2026-10",
@@ -371,48 +371,37 @@
   "confirmed_count": 197,
   "demo": false,
   "etf_closes": {
-    "growth": {
-      "symbol": "159915",
-      "date": "2026-11-20",
-      "close": 2.23,
-      "source": "AKShare fund_etf_hist_em 不复权收盘价"
-    },
+    "growth": null,
     "dividend": null
   },
-  "generated_at": "2026-11-22T23:44:38+08:00",
+  "generated_at": "2026-11-24T06:07:06+08:00",
   "price_sources": {
-    "growth": "东方财富深交所指数",
+    "growth": "新浪深交所指数",
     "dividend": "中证指数公司官方历史"
   },
   "calendar_source": "exchange_calendars XSHG",
   "history": [
     {
-      "date": "2025-10-28",
-      "growth": 3229.58,
-      "dividend": 5651.65,
-      "ratio": 0.57144
-    },
-    {
       "date": "2025-10-29",
-      "growth": 3324.27,
+      "growth": 3324.271,
       "dividend": 5653.75,
       "ratio": 0.587976
     },
     {
       "date": "2025-10-30",
-      "growth": 3263.02,
+      "growth": 3263.022,
       "dividend": 5630.55,
       "ratio": 0.579521
     },
     {
       "date": "2025-10-31",
-      "growth": 3187.53,
+      "growth": 3187.533,
       "dividend": 5627.67,
-      "ratio": 0.566403
+      "ratio": 0.566404
     },
     {
       "date": "2025-11-03",
-      "growth": 3196.87,
+      "growth": 3196.871,
       "dividend": 5678.43,
       "ratio": 0.562985
     },
@@ -424,355 +413,355 @@
     },
     {
       "date": "2025-11-05",
-      "growth": 3166.23,
+      "growth": 3166.231,
       "dividend": 5723.39,
       "ratio": 0.553209
     },
     {
       "date": "2025-11-06",
-      "growth": 3224.62,
+      "growth": 3224.624,
       "dividend": 5745.9,
       "ratio": 0.561204
     },
     {
       "date": "2025-11-07",
-      "growth": 3208.21,
+      "growth": 3208.206,
       "dividend": 5752.94,
       "ratio": 0.557664
     },
     {
       "date": "2025-11-10",
-      "growth": 3178.83,
+      "growth": 3178.827,
       "dividend": 5795.39,
       "ratio": 0.54851
     },
     {
       "date": "2025-11-11",
-      "growth": 3134.32,
+      "growth": 3134.316,
       "dividend": 5782.59,
-      "ratio": 0.542027
+      "ratio": 0.542026
     },
     {
       "date": "2025-11-12",
-      "growth": 3122.03,
+      "growth": 3122.027,
       "dividend": 5786.42,
       "ratio": 0.539544
     },
     {
       "date": "2025-11-13",
-      "growth": 3201.75,
+      "growth": 3201.754,
       "dividend": 5801.99,
       "ratio": 0.551837
     },
     {
       "date": "2025-11-14",
-      "growth": 3111.51,
+      "growth": 3111.507,
       "dividend": 5767.56,
-      "ratio": 0.539485
+      "ratio": 0.539484
     },
     {
       "date": "2025-11-17",
-      "growth": 3105.2,
+      "growth": 3105.203,
       "dividend": 5739.32,
       "ratio": 0.54104
     },
     {
       "date": "2025-11-18",
-      "growth": 3069.22,
+      "growth": 3069.219,
       "dividend": 5659.78,
       "ratio": 0.542286
     },
     {
       "date": "2025-11-19",
-      "growth": 3076.85,
+      "growth": 3076.845,
       "dividend": 5668.66,
-      "ratio": 0.542783
+      "ratio": 0.542782
     },
     {
       "date": "2025-11-20",
-      "growth": 3042.34,
+      "growth": 3042.341,
       "dividend": 5656.04,
       "ratio": 0.537892
     },
     {
       "date": "2025-11-21",
-      "growth": 2920.08,
+      "growth": 2920.078,
       "dividend": 5554.52,
       "ratio": 0.525712
     },
     {
       "date": "2025-11-24",
-      "growth": 2929.04,
+      "growth": 2929.043,
       "dividend": 5527.17,
       "ratio": 0.529935
     },
     {
       "date": "2025-11-25",
-      "growth": 2980.93,
+      "growth": 2980.934,
       "dividend": 5554.22,
-      "ratio": 0.536696
+      "ratio": 0.536697
     },
     {
       "date": "2025-11-26",
-      "growth": 3044.69,
+      "growth": 3044.695,
       "dividend": 5530.79,
-      "ratio": 0.550498
+      "ratio": 0.550499
     },
     {
       "date": "2025-11-27",
-      "growth": 3031.3,
+      "growth": 3031.296,
       "dividend": 5540.0,
-      "ratio": 0.547166
+      "ratio": 0.547165
     },
     {
       "date": "2025-11-28",
-      "growth": 3052.59,
+      "growth": 3052.587,
       "dividend": 5545.84,
-      "ratio": 0.550429
+      "ratio": 0.550428
     },
     {
       "date": "2025-12-01",
-      "growth": 3092.5,
+      "growth": 3092.499,
       "dividend": 5591.82,
       "ratio": 0.55304
     },
     {
       "date": "2025-12-02",
-      "growth": 3071.15,
+      "growth": 3071.149,
       "dividend": 5584.86,
       "ratio": 0.549906
     },
     {
       "date": "2025-12-03",
-      "growth": 3036.79,
+      "growth": 3036.786,
       "dividend": 5573.9,
-      "ratio": 0.544823
+      "ratio": 0.544822
     },
     {
       "date": "2025-12-04",
-      "growth": 3067.48,
+      "growth": 3067.484,
       "dividend": 5552.96,
-      "ratio": 0.552404
+      "ratio": 0.552405
     },
     {
       "date": "2025-12-05",
-      "growth": 3109.3,
+      "growth": 3109.297,
       "dividend": 5557.97,
-      "ratio": 0.559431
+      "ratio": 0.55943
     },
     {
       "date": "2025-12-08",
-      "growth": 3190.27,
+      "growth": 3190.269,
       "dividend": 5527.42,
-      "ratio": 0.577172
+      "ratio": 0.577171
     },
     {
       "date": "2025-12-09",
-      "growth": 3209.6,
+      "growth": 3209.603,
       "dividend": 5476.84,
-      "ratio": 0.586031
+      "ratio": 0.586032
     },
     {
       "date": "2025-12-10",
-      "growth": 3209.0,
+      "growth": 3209.004,
       "dividend": 5481.58,
-      "ratio": 0.585415
+      "ratio": 0.585416
     },
     {
       "date": "2025-12-11",
-      "growth": 3163.67,
+      "growth": 3163.675,
       "dividend": 5435.62,
-      "ratio": 0.582026
+      "ratio": 0.582027
     },
     {
       "date": "2025-12-12",
-      "growth": 3194.36,
+      "growth": 3194.359,
       "dividend": 5426.72,
       "ratio": 0.588635
     },
     {
       "date": "2025-12-15",
-      "growth": 3137.8,
+      "growth": 3137.801,
       "dividend": 5457.03,
-      "ratio": 0.575001
+      "ratio": 0.575002
     },
     {
       "date": "2025-12-16",
-      "growth": 3071.76,
+      "growth": 3071.762,
       "dividend": 5414.32,
       "ratio": 0.56734
     },
     {
       "date": "2025-12-17",
-      "growth": 3175.91,
+      "growth": 3175.908,
       "dividend": 5429.68,
-      "ratio": 0.584917
+      "ratio": 0.584916
     },
     {
       "date": "2025-12-18",
-      "growth": 3107.06,
+      "growth": 3107.065,
       "dividend": 5473.71,
-      "ratio": 0.567633
+      "ratio": 0.567634
     },
     {
       "date": "2025-12-19",
-      "growth": 3122.24,
+      "growth": 3122.238,
       "dividend": 5483.35,
-      "ratio": 0.569404
+      "ratio": 0.569403
     },
     {
       "date": "2025-12-22",
-      "growth": 3191.98,
+      "growth": 3191.985,
       "dividend": 5458.23,
-      "ratio": 0.584801
+      "ratio": 0.584802
     },
     {
       "date": "2025-12-23",
-      "growth": 3205.01,
+      "growth": 3205.011,
       "dividend": 5459.13,
       "ratio": 0.587092
     },
     {
       "date": "2025-12-24",
-      "growth": 3229.58,
+      "growth": 3229.577,
       "dividend": 5472.24,
       "ratio": 0.590175
     },
     {
       "date": "2025-12-25",
-      "growth": 3239.34,
+      "growth": 3239.343,
       "dividend": 5486.44,
       "ratio": 0.590427
     },
     {
       "date": "2025-12-26",
-      "growth": 3243.88,
+      "growth": 3243.876,
       "dividend": 5513.75,
-      "ratio": 0.588326
+      "ratio": 0.588325
     },
     {
       "date": "2025-12-29",
-      "growth": 3222.61,
+      "growth": 3222.611,
       "dividend": 5501.74,
       "ratio": 0.585744
     },
     {
       "date": "2025-12-30",
-      "growth": 3242.9,
+      "growth": 3242.905,
       "dividend": 5499.21,
-      "ratio": 0.589703
+      "ratio": 0.589704
     },
     {
       "date": "2025-12-31",
-      "growth": 3203.17,
+      "growth": 3203.172,
       "dividend": 5503.98,
-      "ratio": 0.581973
+      "ratio": 0.581974
     },
     {
       "date": "2026-01-05",
-      "growth": 3294.55,
+      "growth": 3294.551,
       "dividend": 5525.12,
       "ratio": 0.596286
     },
     {
       "date": "2026-01-06",
-      "growth": 3319.29,
+      "growth": 3319.292,
       "dividend": 5591.04,
-      "ratio": 0.59368
+      "ratio": 0.593681
     },
     {
       "date": "2026-01-07",
-      "growth": 3329.69,
+      "growth": 3329.693,
       "dividend": 5592.91,
-      "ratio": 0.595341
+      "ratio": 0.595342
     },
     {
       "date": "2026-01-08",
-      "growth": 3302.31,
+      "growth": 3302.307,
       "dividend": 5574.6,
       "ratio": 0.592385
     },
     {
       "date": "2026-01-09",
-      "growth": 3327.81,
+      "growth": 3327.813,
       "dividend": 5592.68,
       "ratio": 0.59503
     },
     {
       "date": "2026-01-12",
-      "growth": 3388.34,
+      "growth": 3388.341,
       "dividend": 5611.17,
       "ratio": 0.603856
     },
     {
       "date": "2026-01-13",
-      "growth": 3321.89,
+      "growth": 3321.889,
       "dividend": 5591.97,
       "ratio": 0.594046
     },
     {
       "date": "2026-01-14",
-      "growth": 3349.14,
+      "growth": 3349.138,
       "dividend": 5552.31,
-      "ratio": 0.603198
+      "ratio": 0.603197
     },
     {
       "date": "2026-01-15",
-      "growth": 3367.92,
+      "growth": 3367.917,
       "dividend": 5541.7,
       "ratio": 0.607741
     },
     {
       "date": "2026-01-16",
-      "growth": 3361.02,
+      "growth": 3361.017,
       "dividend": 5493.39,
-      "ratio": 0.61183
+      "ratio": 0.611829
     },
     {
       "date": "2026-01-19",
-      "growth": 3337.61,
+      "growth": 3337.608,
       "dividend": 5538.89,
       "ratio": 0.602577
     },
     {
       "date": "2026-01-20",
-      "growth": 3277.98,
+      "growth": 3277.979,
       "dividend": 5611.84,
-      "ratio": 0.584119
+      "ratio": 0.584118
     },
     {
       "date": "2026-01-21",
-      "growth": 3295.52,
+      "growth": 3295.523,
       "dividend": 5577.54,
-      "ratio": 0.590855
+      "ratio": 0.590856
     },
     {
       "date": "2026-01-22",
-      "growth": 3328.65,
+      "growth": 3328.647,
       "dividend": 5618.15,
-      "ratio": 0.592482
+      "ratio": 0.592481
     },
     {
       "date": "2026-01-23",
-      "growth": 3349.5,
+      "growth": 3349.503,
       "dividend": 5611.48,
-      "ratio": 0.596901
+      "ratio": 0.596902
     },
     {
       "date": "2026-01-26",
-      "growth": 3319.15,
+      "growth": 3319.149,
       "dividend": 5648.09,
       "ratio": 0.587659
     },
     {
       "date": "2026-01-27",
-      "growth": 3342.6,
+      "growth": 3342.599,
       "dividend": 5599.92,
       "ratio": 0.596901
     },
     {
       "date": "2026-01-28",
-      "growth": 3323.56,
+      "growth": 3323.562,
       "dividend": 5687.32,
       "ratio": 0.584381
     },
@@ -784,37 +773,37 @@
     },
     {
       "date": "2026-01-30",
-      "growth": 3346.36,
+      "growth": 3346.355,
       "dividend": 5700.01,
-      "ratio": 0.58708
+      "ratio": 0.587079
     },
     {
       "date": "2026-02-02",
-      "growth": 3264.11,
+      "growth": 3264.111,
       "dividend": 5521.87,
       "ratio": 0.591124
     },
     {
       "date": "2026-02-03",
-      "growth": 3324.89,
+      "growth": 3324.892,
       "dividend": 5563.8,
-      "ratio": 0.597593
+      "ratio": 0.597594
     },
     {
       "date": "2026-02-04",
-      "growth": 3311.51,
+      "growth": 3311.515,
       "dividend": 5712.03,
-      "ratio": 0.579743
+      "ratio": 0.579744
     },
     {
       "date": "2026-02-05",
-      "growth": 3260.28,
+      "growth": 3260.278,
       "dividend": 5686.51,
-      "ratio": 0.573336
+      "ratio": 0.573335
     },
     {
       "date": "2026-02-06",
-      "growth": 3236.46,
+      "growth": 3236.464,
       "dividend": 5671.12,
       "ratio": 0.570692
     },
@@ -826,163 +815,163 @@
     },
     {
       "date": "2026-02-10",
-      "growth": 3320.54,
+      "growth": 3320.537,
       "dividend": 5730.01,
-      "ratio": 0.5795
+      "ratio": 0.579499
     },
     {
       "date": "2026-02-11",
-      "growth": 3284.74,
+      "growth": 3284.735,
       "dividend": 5770.13,
-      "ratio": 0.569266
+      "ratio": 0.569265
     },
     {
       "date": "2026-02-12",
-      "growth": 3328.06,
+      "growth": 3328.063,
       "dividend": 5751.64,
-      "ratio": 0.578628
+      "ratio": 0.578629
     },
     {
       "date": "2026-02-13",
-      "growth": 3275.96,
+      "growth": 3275.958,
       "dividend": 5668.22,
       "ratio": 0.577952
     },
     {
       "date": "2026-02-24",
-      "growth": 3308.26,
+      "growth": 3308.265,
       "dividend": 5754.41,
-      "ratio": 0.574909
+      "ratio": 0.57491
     },
     {
       "date": "2026-02-25",
-      "growth": 3354.82,
+      "growth": 3354.819,
       "dividend": 5785.57,
       "ratio": 0.57986
     },
     {
       "date": "2026-02-26",
-      "growth": 3344.98,
+      "growth": 3344.982,
       "dividend": 5768.92,
       "ratio": 0.579828
     },
     {
       "date": "2026-02-27",
-      "growth": 3310.3,
+      "growth": 3310.305,
       "dividend": 5826.71,
-      "ratio": 0.568125
+      "ratio": 0.568126
     },
     {
       "date": "2026-03-02",
-      "growth": 3294.16,
+      "growth": 3294.161,
       "dividend": 5905.25,
       "ratio": 0.557836
     },
     {
       "date": "2026-03-03",
-      "growth": 3209.48,
+      "growth": 3209.482,
       "dividend": 5952.09,
       "ratio": 0.539219
     },
     {
       "date": "2026-03-04",
-      "growth": 3164.37,
+      "growth": 3164.371,
       "dividend": 5856.15,
       "ratio": 0.54035
     },
     {
       "date": "2026-03-05",
-      "growth": 3216.94,
+      "growth": 3216.939,
       "dividend": 5849.52,
       "ratio": 0.549949
     },
     {
       "date": "2026-03-06",
-      "growth": 3229.3,
+      "growth": 3229.302,
       "dividend": 5860.51,
       "ratio": 0.551027
     },
     {
       "date": "2026-03-09",
-      "growth": 3208.58,
+      "growth": 3208.582,
       "dividend": 5864.51,
-      "ratio": 0.547118
+      "ratio": 0.547119
     },
     {
       "date": "2026-03-10",
-      "growth": 3306.14,
+      "growth": 3306.141,
       "dividend": 5820.49,
-      "ratio": 0.568017
+      "ratio": 0.568018
     },
     {
       "date": "2026-03-11",
-      "growth": 3349.53,
+      "growth": 3349.529,
       "dividend": 5905.18,
       "ratio": 0.567219
     },
     {
       "date": "2026-03-12",
-      "growth": 3317.52,
+      "growth": 3317.522,
       "dividend": 5976.53,
-      "ratio": 0.555091
+      "ratio": 0.555092
     },
     {
       "date": "2026-03-13",
-      "growth": 3310.28,
+      "growth": 3310.278,
       "dividend": 5954.46,
       "ratio": 0.555933
     },
     {
       "date": "2026-03-16",
-      "growth": 3357.02,
+      "growth": 3357.022,
       "dividend": 5912.37,
       "ratio": 0.567796
     },
     {
       "date": "2026-03-17",
-      "growth": 3280.06,
+      "growth": 3280.059,
       "dividend": 5868.48,
       "ratio": 0.558928
     },
     {
       "date": "2026-03-18",
-      "growth": 3346.37,
+      "growth": 3346.365,
       "dividend": 5833.4,
-      "ratio": 0.573657
+      "ratio": 0.573656
     },
     {
       "date": "2026-03-19",
-      "growth": 3309.1,
+      "growth": 3309.103,
       "dividend": 5799.19,
-      "ratio": 0.570614
+      "ratio": 0.570615
     },
     {
       "date": "2026-03-20",
-      "growth": 3352.1,
+      "growth": 3352.103,
       "dividend": 5772.65,
       "ratio": 0.580687
     },
     {
       "date": "2026-03-23",
-      "growth": 3235.22,
+      "growth": 3235.221,
       "dividend": 5626.12,
       "ratio": 0.575036
     },
     {
       "date": "2026-03-24",
-      "growth": 3251.55,
+      "growth": 3251.545,
       "dividend": 5712.79,
-      "ratio": 0.56917
+      "ratio": 0.569169
     },
     {
       "date": "2026-03-25",
-      "growth": 3316.97,
+      "growth": 3316.971,
       "dividend": 5726.78,
       "ratio": 0.579203
     },
     {
       "date": "2026-03-26",
-      "growth": 3272.49,
+      "growth": 3272.488,
       "dividend": 5729.34,
       "ratio": 0.571181
     },
@@ -994,37 +983,37 @@
     },
     {
       "date": "2026-03-30",
-      "growth": 3273.36,
+      "growth": 3273.355,
       "dividend": 5795.51,
-      "ratio": 0.56481
+      "ratio": 0.564809
     },
     {
       "date": "2026-03-31",
-      "growth": 3184.95,
+      "growth": 3184.952,
       "dividend": 5727.85,
-      "ratio": 0.556046
+      "ratio": 0.556047
     },
     {
       "date": "2026-04-01",
-      "growth": 3247.52,
+      "growth": 3247.523,
       "dividend": 5731.25,
       "ratio": 0.566634
     },
     {
       "date": "2026-04-02",
-      "growth": 3172.65,
+      "growth": 3172.649,
       "dividend": 5744.64,
       "ratio": 0.55228
     },
     {
       "date": "2026-04-03",
-      "growth": 3149.6,
+      "growth": 3149.596,
       "dividend": 5649.43,
-      "ratio": 0.557508
+      "ratio": 0.557507
     },
     {
       "date": "2026-04-07",
-      "growth": 3160.82,
+      "growth": 3160.816,
       "dividend": 5677.98,
       "ratio": 0.55668
     },
@@ -1036,15 +1025,15 @@
     },
     {
       "date": "2026-04-09",
-      "growth": 3323.3,
+      "growth": 3323.299,
       "dividend": 5680.34,
       "ratio": 0.585053
     },
     {
       "date": "2026-04-10",
-      "growth": 3448.79,
+      "growth": 3448.787,
       "dividend": 5692.53,
-      "ratio": 0.605845
+      "ratio": 0.605844
     },
     {
       "date": "2026-04-13",
@@ -1054,7 +1043,7 @@
     },
     {
       "date": "2026-04-14",
-      "growth": 3558.53,
+      "growth": 3558.527,
       "dividend": 5700.24,
       "ratio": 0.624277
     },
@@ -1066,103 +1055,103 @@
     },
     {
       "date": "2026-04-16",
-      "growth": 3626.27,
+      "growth": 3626.271,
       "dividend": 5734.51,
       "ratio": 0.632359
     },
     {
       "date": "2026-04-17",
-      "growth": 3678.29,
+      "growth": 3678.293,
       "dividend": 5695.32,
-      "ratio": 0.645844
+      "ratio": 0.645845
     },
     {
       "date": "2026-04-20",
-      "growth": 3677.58,
+      "growth": 3677.576,
       "dividend": 5702.51,
       "ratio": 0.644905
     },
     {
       "date": "2026-04-21",
-      "growth": 3688.94,
+      "growth": 3688.937,
       "dividend": 5752.84,
       "ratio": 0.641238
     },
     {
       "date": "2026-04-22",
-      "growth": 3752.76,
+      "growth": 3752.759,
       "dividend": 5752.38,
       "ratio": 0.652384
     },
     {
       "date": "2026-04-23",
-      "growth": 3720.25,
+      "growth": 3720.247,
       "dividend": 5781.32,
-      "ratio": 0.643495
+      "ratio": 0.643494
     },
     {
       "date": "2026-04-24",
-      "growth": 3667.79,
+      "growth": 3667.785,
       "dividend": 5776.34,
-      "ratio": 0.634968
+      "ratio": 0.634967
     },
     {
       "date": "2026-04-27",
-      "growth": 3648.79,
+      "growth": 3648.788,
       "dividend": 5763.87,
       "ratio": 0.633045
     },
     {
       "date": "2026-04-28",
-      "growth": 3596.71,
+      "growth": 3596.712,
       "dividend": 5828.88,
       "ratio": 0.61705
     },
     {
       "date": "2026-04-29",
-      "growth": 3687.17,
+      "growth": 3687.168,
       "dividend": 5884.27,
-      "ratio": 0.626615
+      "ratio": 0.626614
     },
     {
       "date": "2026-04-30",
-      "growth": 3677.15,
+      "growth": 3677.148,
       "dividend": 5865.07,
-      "ratio": 0.626958
+      "ratio": 0.626957
     },
     {
       "date": "2026-05-06",
-      "growth": 3778.16,
+      "growth": 3778.159,
       "dividend": 5881.84,
       "ratio": 0.642343
     },
     {
       "date": "2026-05-07",
-      "growth": 3833.06,
+      "growth": 3833.057,
       "dividend": 5787.2,
       "ratio": 0.662334
     },
     {
       "date": "2026-05-08",
-      "growth": 3796.13,
+      "growth": 3796.128,
       "dividend": 5767.67,
       "ratio": 0.658174
     },
     {
       "date": "2026-05-11",
-      "growth": 3928.97,
+      "growth": 3928.974,
       "dividend": 5783.46,
-      "ratio": 0.679346
+      "ratio": 0.679347
     },
     {
       "date": "2026-05-12",
-      "growth": 3934.88,
+      "growth": 3934.882,
       "dividend": 5774.72,
       "ratio": 0.681398
     },
     {
       "date": "2026-05-13",
-      "growth": 4038.33,
+      "growth": 4038.333,
       "dividend": 5748.08,
       "ratio": 0.702553
     },
@@ -1174,37 +1163,37 @@
     },
     {
       "date": "2026-05-15",
-      "growth": 3929.06,
+      "growth": 3929.064,
       "dividend": 5680.37,
-      "ratio": 0.691691
+      "ratio": 0.691692
     },
     {
       "date": "2026-05-18",
-      "growth": 3914.88,
+      "growth": 3914.875,
       "dividend": 5654.2,
       "ratio": 0.692384
     },
     {
       "date": "2026-05-19",
-      "growth": 3908.44,
+      "growth": 3908.438,
       "dividend": 5662.36,
       "ratio": 0.690249
     },
     {
       "date": "2026-05-20",
-      "growth": 3921.79,
+      "growth": 3921.789,
       "dividend": 5643.58,
       "ratio": 0.694912
     },
     {
       "date": "2026-05-21",
-      "growth": 3829.78,
+      "growth": 3829.779,
       "dividend": 5554.67,
       "ratio": 0.68947
     },
     {
       "date": "2026-05-22",
-      "growth": 3938.5,
+      "growth": 3938.502,
       "dividend": 5545.14,
       "ratio": 0.710262
     },
@@ -1216,103 +1205,103 @@
     },
     {
       "date": "2026-05-26",
-      "growth": 4043.07,
+      "growth": 4043.066,
       "dividend": 5577.26,
       "ratio": 0.72492
     },
     {
       "date": "2026-05-27",
-      "growth": 4045.77,
+      "growth": 4045.773,
       "dividend": 5527.16,
       "ratio": 0.73198
     },
     {
       "date": "2026-05-28",
-      "growth": 4125.07,
+      "growth": 4125.075,
       "dividend": 5513.88,
-      "ratio": 0.748125
+      "ratio": 0.748126
     },
     {
       "date": "2026-05-29",
-      "growth": 4037.95,
+      "growth": 4037.951,
       "dividend": 5578.69,
       "ratio": 0.723817
     },
     {
       "date": "2026-06-01",
-      "growth": 3950.94,
+      "growth": 3950.943,
       "dividend": 5726.1,
       "ratio": 0.689988
     },
     {
       "date": "2026-06-02",
-      "growth": 4055.87,
+      "growth": 4055.871,
       "dividend": 5708.55,
-      "ratio": 0.71049
+      "ratio": 0.710491
     },
     {
       "date": "2026-06-03",
-      "growth": 4122.99,
+      "growth": 4122.987,
       "dividend": 5706.47,
       "ratio": 0.722511
     },
     {
       "date": "2026-06-04",
-      "growth": 4088.88,
+      "growth": 4088.884,
       "dividend": 5681.52,
       "ratio": 0.719681
     },
     {
       "date": "2026-06-05",
-      "growth": 3957.94,
+      "growth": 3957.935,
       "dividend": 5683.85,
       "ratio": 0.696348
     },
     {
       "date": "2026-06-08",
-      "growth": 3811.79,
+      "growth": 3811.785,
       "dividend": 5633.62,
-      "ratio": 0.676615
+      "ratio": 0.676614
     },
     {
       "date": "2026-06-09",
-      "growth": 3961.75,
+      "growth": 3961.749,
       "dividend": 5629.97,
       "ratio": 0.703689
     },
     {
       "date": "2026-06-10",
-      "growth": 3854.79,
+      "growth": 3854.793,
       "dividend": 5588.98,
       "ratio": 0.689713
     },
     {
       "date": "2026-06-11",
-      "growth": 3811.25,
+      "growth": 3811.246,
       "dividend": 5566.74,
-      "ratio": 0.684647
+      "ratio": 0.684646
     },
     {
       "date": "2026-06-12",
-      "growth": 3830.35,
+      "growth": 3830.353,
       "dividend": 5649.5,
-      "ratio": 0.677998
+      "ratio": 0.677999
     },
     {
       "date": "2026-06-15",
-      "growth": 4033.53,
+      "growth": 4033.535,
       "dividend": 5590.7,
-      "ratio": 0.721471
+      "ratio": 0.721472
     },
     {
       "date": "2026-06-16",
-      "growth": 4102.94,
+      "growth": 4102.942,
       "dividend": 5493.67,
       "ratio": 0.746849
     },
     {
       "date": "2026-06-17",
-      "growth": 4167.05,
+      "growth": 4167.048,
       "dividend": 5434.15,
       "ratio": 0.766826
     },
@@ -1324,63 +1313,63 @@
     },
     {
       "date": "2026-06-22",
-      "growth": 4359.39,
+      "growth": 4359.392,
       "dividend": 5373.33,
-      "ratio": 0.811301
+      "ratio": 0.811302
     },
     {
       "date": "2026-06-23",
-      "growth": 4192.19,
+      "growth": 4192.194,
       "dividend": 5342.69,
-      "ratio": 0.784659
+      "ratio": 0.78466
     },
     {
       "date": "2026-06-24",
-      "growth": 4251.42,
+      "growth": 4251.424,
       "dividend": 5262.82,
       "ratio": 0.807822
     },
     {
       "date": "2026-06-25",
-      "growth": 4371.99,
+      "growth": 4371.989,
       "dividend": 5198.51,
       "ratio": 0.841008
     },
     {
       "date": "2026-06-26",
-      "growth": 4194.21,
+      "growth": 4194.209,
       "dividend": 5085.73,
-      "ratio": 0.824702
+      "ratio": 0.824701
     },
     {
       "date": "2026-06-29",
-      "growth": 4216.7,
+      "growth": 4216.699,
       "dividend": 5120.71,
       "ratio": 0.82346
     },
     {
       "date": "2026-06-30",
-      "growth": 4342.71,
+      "growth": 4342.712,
       "dividend": 5022.46,
       "ratio": 0.864658
     },
     {
       "date": "2026-07-01",
-      "growth": 4260.72,
+      "growth": 4260.721,
       "dividend": 5108.21,
       "ratio": 0.834093
     },
     {
       "date": "2026-07-02",
-      "growth": 4017.27,
+      "growth": 4017.273,
       "dividend": 5154.94,
       "ratio": 0.779305
     },
     {
       "date": "2026-07-03",
-      "growth": 4019.93,
+      "growth": 4019.934,
       "dividend": 5207.46,
-      "ratio": 0.771956
+      "ratio": 0.771957
     },
     {
       "date": "2026-07-06",
@@ -1390,51 +1379,51 @@
     },
     {
       "date": "2026-07-07",
-      "growth": 3911.91,
+      "growth": 3911.907,
       "dividend": 5239.37,
       "ratio": 0.746637
     },
     {
       "date": "2026-07-08",
-      "growth": 3845.35,
+      "growth": 3845.351,
       "dividend": 5264.79,
       "ratio": 0.73039
     },
     {
       "date": "2026-07-09",
-      "growth": 4018.17,
+      "growth": 4018.174,
       "dividend": 5200.44,
       "ratio": 0.77266
     },
     {
       "date": "2026-07-10",
-      "growth": 3842.73,
+      "growth": 3842.731,
       "dividend": 5184.1,
       "ratio": 0.741253
     },
     {
       "date": "2026-07-13",
-      "growth": 3723.52,
+      "growth": 3723.517,
       "dividend": 5198.11,
-      "ratio": 0.716322
+      "ratio": 0.716321
     },
     {
       "date": "2026-07-14",
-      "growth": 3851.14,
+      "growth": 3851.137,
       "dividend": 5307.5,
       "ratio": 0.725603
     },
     {
       "date": "2026-07-15",
-      "growth": 3804.7,
+      "growth": 3804.704,
       "dividend": 5378.84,
-      "ratio": 0.707346
+      "ratio": 0.707347
     },
     {
       "date": "2026-07-16",
-      "growth": 3692.46,
+      "growth": 3692.457,
       "dividend": 5321.07,
-      "ratio": 0.693932
+      "ratio": 0.693931
     },
     {
       "date": "2026-07-17",
@@ -1444,19 +1433,19 @@
     },
     {
       "date": "2026-07-20",
-      "growth": 3443.1,
+      "growth": 3443.102,
       "dividend": 5450.51,
-      "ratio": 0.631702
+      "ratio": 0.631703
     },
     {
       "date": "2026-07-21",
-      "growth": 3685.97,
+      "growth": 3685.969,
       "dividend": 5391.09,
       "ratio": 0.683715
     },
     {
       "date": "2026-07-22",
-      "growth": 3566.73,
+      "growth": 3566.732,
       "dividend": 5452.59,
       "ratio": 0.654135
     },
@@ -1474,9 +1463,9 @@
     },
     {
       "date": "2026-07-27",
-      "growth": 3590.79,
+      "growth": 3590.787,
       "dividend": 5434.0,
-      "ratio": 0.660801
+      "ratio": 0.6608
     },
     {
       "date": "2026-07-28",
@@ -1486,39 +1475,39 @@
     },
     {
       "date": "2026-07-29",
-      "growth": 3378.7,
+      "growth": 3378.696,
       "dividend": 5519.12,
-      "ratio": 0.612181
+      "ratio": 0.61218
     },
     {
       "date": "2026-07-30",
-      "growth": 3244.62,
+      "growth": 3244.618,
       "dividend": 5579.6,
-      "ratio": 0.581515
+      "ratio": 0.581514
     },
     {
       "date": "2026-07-31",
-      "growth": 3343.96,
+      "growth": 3343.964,
       "dividend": 5569.41,
-      "ratio": 0.600415
+      "ratio": 0.600416
     },
     {
       "date": "2026-08-03",
-      "growth": 3302.55,
+      "growth": 3302.553,
       "dividend": 5549.16,
-      "ratio": 0.595144
+      "ratio": 0.595145
     },
     {
       "date": "2026-08-04",
-      "growth": 3488.97,
+      "growth": 3488.966,
       "dividend": 5459.34,
-      "ratio": 0.639083
+      "ratio": 0.639082
     },
     {
       "date": "2026-08-05",
-      "growth": 3535.14,
+      "growth": 3535.143,
       "dividend": 5447.98,
-      "ratio": 0.64889
+      "ratio": 0.648891
     },
     {
       "date": "2026-08-06",
@@ -1528,103 +1517,103 @@
     },
     {
       "date": "2026-08-07",
-      "growth": 3563.12,
+      "growth": 3563.116,
       "dividend": 5506.75,
-      "ratio": 0.647046
+      "ratio": 0.647045
     },
     {
       "date": "2026-08-10",
-      "growth": 3537.21,
+      "growth": 3537.214,
       "dividend": 5561.23,
-      "ratio": 0.636048
+      "ratio": 0.636049
     },
     {
       "date": "2026-08-11",
-      "growth": 3549.16,
+      "growth": 3549.164,
       "dividend": 5531.31,
-      "ratio": 0.641649
+      "ratio": 0.64165
     },
     {
       "date": "2026-08-12",
-      "growth": 3602.08,
+      "growth": 3602.083,
       "dividend": 5513.68,
       "ratio": 0.653299
     },
     {
       "date": "2026-08-13",
-      "growth": 3586.04,
+      "growth": 3586.043,
       "dividend": 5464.42,
       "ratio": 0.656253
     },
     {
       "date": "2026-08-14",
-      "growth": 3626.3,
+      "growth": 3626.296,
       "dividend": 5478.39,
-      "ratio": 0.661928
+      "ratio": 0.661927
     },
     {
       "date": "2026-08-17",
-      "growth": 3740.16,
+      "growth": 3740.157,
       "dividend": 5500.06,
-      "ratio": 0.680022
+      "ratio": 0.680021
     },
     {
       "date": "2026-08-18",
-      "growth": 3705.56,
+      "growth": 3705.564,
       "dividend": 5534.83,
-      "ratio": 0.669498
+      "ratio": 0.669499
     },
     {
       "date": "2026-08-19",
-      "growth": 3473.49,
+      "growth": 3473.493,
       "dividend": 5553.33,
       "ratio": 0.625479
     },
     {
       "date": "2026-08-20",
-      "growth": 3495.59,
+      "growth": 3495.589,
       "dividend": 5585.1,
       "ratio": 0.625878
     },
     {
       "date": "2026-08-21",
-      "growth": 3545.58,
+      "growth": 3545.577,
       "dividend": 5579.34,
-      "ratio": 0.635484
+      "ratio": 0.635483
     },
     {
       "date": "2026-08-24",
-      "growth": 3431.89,
+      "growth": 3431.885,
       "dividend": 5653.4,
-      "ratio": 0.607049
+      "ratio": 0.607048
     },
     {
       "date": "2026-08-25",
-      "growth": 3397.52,
+      "growth": 3397.515,
       "dividend": 5619.16,
-      "ratio": 0.604631
+      "ratio": 0.60463
     },
     {
       "date": "2026-08-26",
-      "growth": 3414.88,
+      "growth": 3414.883,
       "dividend": 5658.97,
       "ratio": 0.603446
     },
     {
       "date": "2026-08-27",
-      "growth": 3473.35,
+      "growth": 3473.355,
       "dividend": 5676.05,
-      "ratio": 0.611931
+      "ratio": 0.611932
     },
     {
       "date": "2026-08-28",
-      "growth": 3424.4,
+      "growth": 3424.401,
       "dividend": 5691.52,
       "ratio": 0.601667
     },
     {
       "date": "2026-08-31",
-      "growth": 3438.68,
+      "growth": 3438.681,
       "dividend": 5718.42,
       "ratio": 0.601334
     },
@@ -1636,67 +1625,67 @@
     },
     {
       "date": "2026-09-02",
-      "growth": 3312.24,
+      "growth": 3312.243,
       "dividend": 5634.58,
       "ratio": 0.587842
     },
     {
       "date": "2026-09-03",
-      "growth": 3312.54,
+      "growth": 3312.541,
       "dividend": 5635.06,
       "ratio": 0.587845
     },
     {
       "date": "2026-09-04",
-      "growth": 3286.55,
+      "growth": 3286.546,
       "dividend": 5648.28,
       "ratio": 0.581867
     },
     {
       "date": "2026-09-07",
-      "growth": 3398.68,
+      "growth": 3398.681,
       "dividend": 5580.21,
       "ratio": 0.60906
     },
     {
       "date": "2026-09-08",
-      "growth": 3359.72,
+      "growth": 3359.716,
       "dividend": 5652.8,
-      "ratio": 0.594346
+      "ratio": 0.594345
     },
     {
       "date": "2026-09-09",
-      "growth": 3354.97,
+      "growth": 3354.969,
       "dividend": 5716.0,
-      "ratio": 0.586944
+      "ratio": 0.586943
     },
     {
       "date": "2026-09-10",
-      "growth": 3338.42,
+      "growth": 3338.422,
       "dividend": 5677.09,
-      "ratio": 0.588051
+      "ratio": 0.588052
     },
     {
       "date": "2026-09-11",
-      "growth": 3322.04,
+      "growth": 3322.039,
       "dividend": 5580.28,
       "ratio": 0.595318
     },
     {
       "date": "2026-09-14",
-      "growth": 3285.58,
+      "growth": 3285.583,
       "dividend": 5568.76,
-      "ratio": 0.590002
+      "ratio": 0.590003
     },
     {
       "date": "2026-09-15",
-      "growth": 3247.92,
+      "growth": 3247.918,
       "dividend": 5534.25,
       "ratio": 0.586876
     },
     {
       "date": "2026-09-16",
-      "growth": 3311.47,
+      "growth": 3311.474,
       "dividend": 5503.7,
       "ratio": 0.601681
     },
@@ -1708,9 +1697,9 @@
     },
     {
       "date": "2026-09-18",
-      "growth": 3372.68,
+      "growth": 3372.676,
       "dividend": 5461.76,
-      "ratio": 0.617508
+      "ratio": 0.617507
     },
     {
       "date": "2026-09-21",
@@ -1732,109 +1721,109 @@
     },
     {
       "date": "2026-09-24",
-      "growth": 3288.95,
+      "growth": 3288.948,
       "dividend": 5469.4,
-      "ratio": 0.601337
+      "ratio": 0.601336
     },
     {
       "date": "2026-09-28",
-      "growth": 3139.82,
+      "growth": 3139.825,
       "dividend": 5439.6,
-      "ratio": 0.577215
+      "ratio": 0.577216
     },
     {
       "date": "2026-09-29",
-      "growth": 3142.56,
+      "growth": 3142.563,
       "dividend": 5428.67,
-      "ratio": 0.578882
+      "ratio": 0.578883
     },
     {
       "date": "2026-09-30",
-      "growth": 3135.28,
+      "growth": 3135.277,
       "dividend": 5493.34,
-      "ratio": 0.570742
+      "ratio": 0.570741
     },
     {
       "date": "2026-10-08",
-      "growth": 3036.66,
+      "growth": 3036.657,
       "dividend": 5556.01,
       "ratio": 0.546554
     },
     {
       "date": "2026-10-09",
-      "growth": 3043.33,
+      "growth": 3043.335,
       "dividend": 5601.34,
-      "ratio": 0.543322
+      "ratio": 0.543323
     },
     {
       "date": "2026-10-12",
-      "growth": 2963.82,
+      "growth": 2963.824,
       "dividend": 5618.87,
-      "ratio": 0.527476
+      "ratio": 0.527477
     },
     {
       "date": "2026-10-13",
-      "growth": 2958.34,
+      "growth": 2958.344,
       "dividend": 5635.07,
-      "ratio": 0.524987
+      "ratio": 0.524988
     },
     {
       "date": "2026-10-14",
-      "growth": 2866.76,
+      "growth": 2866.763,
       "dividend": 5672.93,
-      "ratio": 0.50534
+      "ratio": 0.505341
     },
     {
       "date": "2026-10-15",
-      "growth": 2783.17,
+      "growth": 2783.175,
       "dividend": 5535.58,
-      "ratio": 0.502778
+      "ratio": 0.502779
     },
     {
       "date": "2026-10-16",
-      "growth": 2772.38,
+      "growth": 2772.384,
       "dividend": 5580.71,
-      "ratio": 0.496779
+      "ratio": 0.49678
     },
     {
       "date": "2026-10-19",
-      "growth": 2746.29,
+      "growth": 2746.291,
       "dividend": 5623.37,
       "ratio": 0.488371
     },
     {
       "date": "2026-10-20",
-      "growth": 2739.2,
+      "growth": 2739.203,
       "dividend": 5555.54,
-      "ratio": 0.493057
+      "ratio": 0.493058
     },
     {
       "date": "2026-10-21",
-      "growth": 2694.71,
+      "growth": 2694.713,
       "dividend": 5498.0,
       "ratio": 0.490126
     },
     {
       "date": "2026-10-22",
-      "growth": 2576.9,
+      "growth": 2576.901,
       "dividend": 5405.75,
       "ratio": 0.476696
     },
     {
       "date": "2026-10-23",
-      "growth": 2684.1,
+      "growth": 2684.097,
       "dividend": 5398.82,
       "ratio": 0.497164
     },
     {
       "date": "2026-10-26",
-      "growth": 2638.23,
+      "growth": 2638.231,
       "dividend": 5465.01,
-      "ratio": 0.482749
+      "ratio": 0.48275
     },
     {
       "date": "2026-10-27",
-      "growth": 2548.15,
+      "growth": 2548.149,
       "dividend": 5497.74,
       "ratio": 0.46349
     },
@@ -1846,25 +1835,25 @@
     },
     {
       "date": "2026-10-29",
-      "growth": 2517.59,
+      "growth": 2517.588,
       "dividend": 5546.77,
       "ratio": 0.453884
     },
     {
       "date": "2026-10-30",
-      "growth": 2413.63,
+      "growth": 2413.629,
       "dividend": 5592.45,
       "ratio": 0.431587
     },
     {
       "date": "2026-11-02",
-      "growth": 2458.7,
+      "growth": 2458.698,
       "dividend": 5587.66,
       "ratio": 0.440023
     },
     {
       "date": "2026-11-03",
-      "growth": 2391.65,
+      "growth": 2391.652,
       "dividend": 5594.87,
       "ratio": 0.427472
     },
@@ -1876,45 +1865,45 @@
     },
     {
       "date": "2026-11-05",
-      "growth": 2566.8,
+      "growth": 2566.803,
       "dividend": 5517.81,
       "ratio": 0.465185
     },
     {
       "date": "2026-11-06",
-      "growth": 2465.23,
+      "growth": 2465.232,
       "dividend": 5532.07,
-      "ratio": 0.445625
+      "ratio": 0.445626
     },
     {
       "date": "2026-11-09",
-      "growth": 2458.56,
+      "growth": 2458.562,
       "dividend": 5561.92,
-      "ratio": 0.442034
+      "ratio": 0.442035
     },
     {
       "date": "2026-11-10",
-      "growth": 2494.4,
+      "growth": 2494.397,
       "dividend": 5529.32,
       "ratio": 0.451122
     },
     {
       "date": "2026-11-11",
-      "growth": 2572.07,
+      "growth": 2572.067,
       "dividend": 5525.1,
-      "ratio": 0.465525
+      "ratio": 0.465524
     },
     {
       "date": "2026-11-12",
-      "growth": 2509.43,
+      "growth": 2509.429,
       "dividend": 5492.27,
       "ratio": 0.456902
     },
     {
       "date": "2026-11-13",
-      "growth": 2426.08,
+      "growth": 2426.084,
       "dividend": 5510.92,
-      "ratio": 0.440231
+      "ratio": 0.440232
     },
     {
       "date": "2026-11-16",
@@ -1924,27 +1913,33 @@
     },
     {
       "date": "2026-11-17",
-      "growth": 2292.2,
+      "growth": 2292.204,
       "dividend": 5568.61,
       "ratio": 0.411629
     },
     {
       "date": "2026-11-18",
-      "growth": 2311.62,
+      "growth": 2311.621,
       "dividend": 5573.61,
       "ratio": 0.414744
     },
     {
       "date": "2026-11-19",
-      "growth": 2293.34,
+      "growth": 2293.342,
       "dividend": 5548.05,
       "ratio": 0.41336
     },
     {
       "date": "2026-11-20",
-      "growth": 2212.13,
+      "growth": 2212.127,
       "dividend": 5529.78,
       "ratio": 0.400039
+    },
+    {
+      "date": "2026-11-23",
+      "growth": 2280.204,
+      "dividend": 5492.17,
+      "ratio": 0.415174
     }
   ],
   "notes": "指数价格仅用于信号；ETF收盘价仅用于估值和数量预估。个人持仓仅保存于本地浏览器，不上传至GitHub；成交以券商回报为准。"
