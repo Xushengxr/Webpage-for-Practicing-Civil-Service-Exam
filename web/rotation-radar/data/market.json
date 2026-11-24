@@ -15,10 +15,10 @@
     ]
   },
   "latest": {
-    "date": "2026-11-23",
-    "growth": 2280.2,
-    "dividend": 5492.17,
-    "ratio": 0.415173
+    "date": "2026-11-24",
+    "growth": 2278.99,
+    "dividend": 5447.88,
+    "ratio": 0.418326
   },
   "current_state": {
     "direction": "dividend",
@@ -28,7 +28,7 @@
   "forecast": {
     "is_confirmed": false,
     "signal_month": "2026-11",
-    "ratio": 0.415173,
+    "ratio": 0.418326,
     "expected_execution": "2026-12-01",
     "kind": "hold",
     "side": "dividend",
@@ -373,30 +373,19 @@
   "etf_closes": {
     "growth": {
       "symbol": "159915",
-      "date": "2026-11-23",
-      "close": 2.295,
+      "date": "2026-11-24",
+      "close": 2.292,
       "source": "AKShare fund_etf_hist_em 不复权收盘价"
     },
-    "dividend": {
-      "symbol": "515080",
-      "date": "2026-11-23",
-      "close": 1.55,
-      "source": "AKShare fund_etf_hist_em 不复权收盘价"
-    }
+    "dividend": null
   },
-  "generated_at": "2026-11-24T07:58:54+08:00",
+  "generated_at": "2026-11-25T04:43:40+08:00",
   "price_sources": {
     "growth": "东方财富深交所指数",
     "dividend": "中证指数公司官方历史"
   },
   "calendar_source": "exchange_calendars XSHG",
   "history": [
-    {
-      "date": "2025-10-29",
-      "growth": 3324.27,
-      "dividend": 5653.75,
-      "ratio": 0.587976
-    },
     {
       "date": "2025-10-30",
       "growth": 3263.02,
@@ -1950,6 +1939,12 @@
       "growth": 2280.2,
       "dividend": 5492.17,
       "ratio": 0.415173
+    },
+    {
+      "date": "2026-11-24",
+      "growth": 2278.99,
+      "dividend": 5447.88,
+      "ratio": 0.418326
     }
   ],
   "notes": "指数价格仅用于信号；ETF收盘价仅用于估值和数量预估。个人持仓仅保存于本地浏览器，不上传至GitHub；成交以券商回报为准。"
