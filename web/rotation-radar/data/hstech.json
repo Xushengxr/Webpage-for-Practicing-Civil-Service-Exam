@@ -1415,6 +1415,6 @@
   ],
   "source": "AKShare/东方财富港股指数 index_hk_daily_em",
   "verified_daily": true,
-  "generated_at": "2026-11-28T03:32:26+08:00",
+  "generated_at": "2026-11-28T05:24:49+08:00",
   "notes": "港股交易日历与沪深不同。仅用两地同日的收盘价生成日度双指数比值；每月末使用两地各自最后交易日的收盘。指数点位不是ETF价格。"
 }
